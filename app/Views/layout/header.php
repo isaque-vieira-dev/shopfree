@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo isset($pageTitle) ? $pageTitle . " - " . APP_NAME : APP_NAME; ?></title>
+    <!-- Google Fonts: Outfit e Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #f9f8f4;
+            --text-color: #1a1a1a;
+            --text-muted: #666666;
+            --accent-purple: #7c3aed;
+            --accent-purple-hover: #6d28d9;
+            --accent-purple-light: #f5f3ff;
+            --border-color: rgba(0, 0, 0, 0.06);
+            --font-outfit: 'Outfit', sans-serif;
+            --font-inter: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-color);
+            font-family: var(--font-inter);
+            line-height: 1.6;
+        }
+
+        /* Header / Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 8%;
+            background-color: var(--bg-base);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: var(--font-outfit);
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-purple);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-family: var(--font-outfit);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-purple);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Barra de Busca */
+        .search-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 2px 2px 2px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: border-color 0.25s ease;
+        }
+
+        .search-container:focus-within {
+            border-color: var(--accent-purple);
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            font-size: 0.85rem;
+            font-family: var(--font-inter);
+            color: var(--text-color);
+            width: 160px;
+            transition: width 0.3s ease;
+        }
+
+        .search-input:focus {
+            width: 200px;
+        }
+
+        .search-button {
+            background-color: var(--accent-purple);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ffffff;
+            transition: background-color 0.25s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--accent-purple-hover);
+        }
+
+        /* Ícones de ação */
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: color 0.25s ease;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-purple);
+        }
+
+        .icon-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-purple);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-base);
+        }
+
+        /* Menu Hamburger */
+        .menu-toggle {
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo">ShopFree<span>.</span></a>
+            
+            <?php
+            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $isContact = (strpos($uri, 'contact') !== false || strpos($uri, 'contato') !== false);
+            $isAbout = (strpos($uri, 'about') !== false || strpos($uri, 'sobre') !== false);
+            $isHome = (!$isContact && !$isAbout);
+            ?>
+            <ul class="nav-links">
+                <li><a href="/" class="<?php echo $isHome ? 'active' : ''; ?>">Home</a></li>
+                <li><a href="/about" class="<?php echo $isAbout ? 'active' : ''; ?>">Sobre nos</a></li>
+                <li><a href="/#shop">Produtos</a></li>
+                <li><a href="/#pages">Categorias</a></li>
+                <li><a href="/contact" class="<?php echo $isContact ? 'active' : ''; ?>">Contato</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <!-- Barra de Busca -->
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <button class="search-button">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
+
+                <!-- Lista de Desejos -->
+                <button class="icon-btn" aria-label="Wishlist">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span class="icon-badge">1</span>
+                </button>
+
+                <!-- Carrinho -->
+                <button class="icon-btn" aria-label="Cart">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="icon-badge">10</span>
+                </button>
+
+                <!-- Hamburger Menu -->
+                <button class="icon-btn menu-toggle" aria-label="Menu">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
