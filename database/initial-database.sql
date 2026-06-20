@@ -190,6 +190,16 @@ CREATE TABLE IF NOT EXISTS order_item (
 );
 
 -- =========================
+-- TABELA: password_resets
+-- =========================
+
+CREATE TABLE IF NOT EXISTS password_resets (
+    email VARCHAR(150) PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL
+);
+
+-- =========================
 -- POPULAR DADOS INICIAIS
 -- =========================
 

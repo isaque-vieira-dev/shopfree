@@ -205,6 +205,7 @@
                 <li><a href="/#shop">Produtos</a></li>
                 <li><a href="/#pages">Categorias</a></li>
                 <li><a href="/contact" class="<?php echo $isContact ? 'active' : ''; ?>">Contato</a></li>
+                <li><a href="/seller" class="<?php echo ($uri === '/seller') ? 'active' : ''; ?>">Anuncie seus produtos</a></li>
             </ul>
 
             <div class="nav-actions">
@@ -216,17 +217,25 @@
                     </button>
                 </div>
 
-                <!-- Lista de Desejos -->
-                <button class="icon-btn" aria-label="Wishlist">
-                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    <span class="icon-badge">1</span>
-                </button>
-
-                <!-- Carrinho -->
-                <button class="icon-btn" aria-label="Cart">
+                <!-- Carrinho (Ocultado conforme solicitação) -->
+                <button class="icon-btn" aria-label="Cart" style="display: none;">
                     <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                     <span class="icon-badge">10</span>
                 </button>
+
+                <!-- Ícone de Login / Usuário -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <div class="user-menu" style="display: flex; align-items: center; gap: 8px; font-family: var(--font-outfit); font-size: 0.9rem; font-weight: 500;">
+                        <span class="user-name" style="color: var(--text-muted);">Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?></span>
+                        <a href="/logout" class="icon-btn" aria-label="Logout" title="Sair" style="color: #ef4444;">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <a href="/login" class="icon-btn" aria-label="Login" title="Entrar">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </a>
+                <?php endif; ?>
 
                 <!-- Hamburger Menu -->
                 <button class="icon-btn menu-toggle" aria-label="Menu">

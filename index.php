@@ -1,5 +1,10 @@
 <?php
 
+// Iniciar a sessão do PHP para controle de login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Habilitar exibição de erros para desenvolvimento
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -29,6 +34,7 @@ spl_autoload_register(function ($class) {
 // Inicializar Roteador
 use App\Core\Router;
 use App\Controllers\HomeController;
+use App\Controllers\AuthController;
 
 $router = new Router();
 
@@ -38,6 +44,23 @@ $router->get('/contact', [HomeController::class, 'contact']);
 $router->get('/contato', [HomeController::class, 'contact']);
 $router->get('/about', [HomeController::class, 'about']);
 $router->get('/sobre', [HomeController::class, 'about']);
+
+// Rotas de Autenticação
+$router->get('/login', [AuthController::class, 'showLoginForm']);
+$router->post('/login', [AuthController::class, 'login']);
+$router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/register', [AuthController::class, 'showRegisterForm']);
+$router->post('/register', [AuthController::class, 'register']);
+
+// Rotas de Vendedor (Seller)
+$router->get('/seller', [AuthController::class, 'showSellerRegisterForm']);
+$router->post('/seller', [AuthController::class, 'registerSeller']);
+
+// Rotas de Recuperação de Senha
+$router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm']);
+$router->post('/forgot-password', [AuthController::class, 'forgotPassword']);
+$router->get('/reset-password', [AuthController::class, 'showResetPasswordForm']);
+$router->post('/reset-password', [AuthController::class, 'resetPassword']);
 
 // Resolver Rota Atual
 $router->resolve();
