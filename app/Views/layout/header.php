@@ -225,8 +225,11 @@
 
                 <!-- Ícone de Login / Usuário -->
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <div class="user-menu" style="display: flex; align-items: center; gap: 8px; font-family: var(--font-outfit); font-size: 0.9rem; font-weight: 500;">
-                        <span class="user-name" style="color: var(--text-muted);">Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?></span>
+                    <div class="user-menu" style="display: flex; align-items: center; gap: 12px; font-family: var(--font-outfit); font-size: 0.9rem; font-weight: 500;">
+                        <a href="/dashboard" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                            <span class="user-name" style="color: var(--text-muted); font-weight: 600; margin-bottom: 2px;">Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?></span>
+                            <span class="user-role" style="font-size: 0.75rem; color: var(--accent-purple); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo htmlspecialchars($_SESSION['role_name'] ?? 'Usuário'); ?></span>
+                        </a>
                         <a href="/logout" class="icon-btn" aria-label="Logout" title="Sair" style="color: #ef4444;">
                             <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                         </a>

@@ -58,6 +58,7 @@ class AuthController {
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['role_id'] = $user['role_id'];
+            $_SESSION['role_name'] = $this->getRoleLabel($user['role_name'] ?? null);
 
             header('Location: /');
             exit;
@@ -153,6 +154,7 @@ class AuthController {
             $newUser = $this->userModel->findByEmail($email);
             if ($newUser) {
                 $_SESSION['role_id'] = $newUser['role_id'];
+                $_SESSION['role_name'] = $this->getRoleLabel($newUser['role_name'] ?? null);
             }
 
             $_SESSION['register_success'] = "Conta criada com sucesso!";
@@ -232,6 +234,7 @@ class AuthController {
             $_SESSION['user_name'] = $name;
             $_SESSION['user_email'] = $email;
             $_SESSION['role_id'] = $sellerRoleId;
+            $_SESSION['role_name'] = $this->getRoleLabel('seller');
 
             $_SESSION['register_success'] = "Sua conta de vendedor foi criada com sucesso!";
             header('Location: /');
@@ -382,5 +385,17 @@ class AuthController {
         $_SESSION['register_success'] = "Senha redefinida com sucesso! Por favor, faça login.";
         header('Location: /login');
         exit;
+    }
+
+    /**
+     * Traduz o nome da role para exibição na sessão.
+     */
+    private function getRoleLabel(?string $roleName): string {
+        $map = [
+            'seller' => 'Vendedor',
+            'client' => 'Usuário',
+            'admin'  => 'Administrador'
+        ];
+        return $map[$roleName] ?? 'Usuário';
     }
 }

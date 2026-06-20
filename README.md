@@ -62,6 +62,32 @@ docker compose exec web composer require vlucas/phpdotenv
 
 ---
 
+## 🔐 Sistema de Autenticação e Níveis de Acesso
+
+O ShopFree possui um sistema completo de autenticação e controle de níveis de acesso (RBAC - Role-Based Access Control). O tipo do usuário conectado (Administrador, Vendedor ou Usuário comum) é exibido diretamente no cabeçalho do site, abaixo de seu nome.
+
+### Níveis de Acesso Disponíveis:
+- **Administrador (admin)**: Usuário com permissões de gestão do sistema.
+- **Vendedor (seller)**: Usuários que podem anunciar seus próprios produtos na plataforma.
+- **Usuário (client)**: Clientes comuns que podem navegar e efetuar compras.
+
+### Funcionalidades do Sistema de Autenticação:
+- **Login / Logout**: Autenticação com sessão persistente.
+- **Cadastro Geral**: Cadastro de clientes normais (`client`).
+- **Cadastro de Vendedores**: Cadastro dedicado a vendedores (`seller`), disponível no link "Anuncie seus produtos".
+- **Recuperação de Senha**: Fluxo completo de simulação de alteração de senha ("Esqueci minha senha") via token com tempo de expiração de 1 hora.
+
+---
+
+## 👤 Credenciais do Administrador Padrão
+
+Para testar o painel administrativo ou as funções restritas, você pode fazer login utilizando o usuário administrador inicial criado automaticamente:
+
+- **E-mail**: `admin@shopfree.com`
+- **Senha**: `admin123`
+
+---
+
 ## 🗄️ Conexão ao Banco de Dados (MySQL)
 
 Se desejar conectar ao banco de dados usando ferramentas externas (como TablePlus, DBeaver ou VS Code Database Extension), utilize as seguintes credenciais:
@@ -80,10 +106,10 @@ Se desejar conectar ao banco de dados usando ferramentas externas (como TablePlu
 ```
 shopfree/
 ├── app/
-│   ├── Controllers/    # Controladores (Home, Contato, Sobre Nós)
+│   ├── Controllers/    # Controladores (Home, Contato, Sobre Nós, Autenticação)
 │   ├── Core/           # Núcleo do sistema (Roteador simples)
-│   ├── Models/         # Modelos e Conexão (Database via PDO)
-│   └── Views/          # Telas (Home, Contato, Sobre Nós e layouts compartilhados)
+│   ├── Models/         # Modelos e Conexão (Database via PDO, User)
+│   └── Views/          # Telas (Home, Contato, Sobre Nós, Telas de Auth e layouts)
 ├── database/           # Scripts SQL de inicialização do banco
 ├── .htaccess           # Regras de reescrita para suporte a URLs amigáveis
 ├── config.php          # Configurações globais e credenciais do banco

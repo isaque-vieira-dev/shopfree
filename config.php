@@ -8,5 +8,5 @@ define('DB_PASS', 'shopfree_password');
 define('DB_CHARSET', 'utf8mb4');
 
 // Configurações da Aplicação
-define('APP_NAME', 'ADDINA Shopfree');
+define('APP_NAME', 'SHOPFREE');
 define('BASE_URL', 'http://localhost:8080');

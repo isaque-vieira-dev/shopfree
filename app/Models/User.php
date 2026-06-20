@@ -27,7 +27,13 @@ class User {
      * @return array|false
      */
     public function findByEmail(string $email) {
-        $stmt = $this->db->prepare("SELECT * FROM user WHERE email = :email LIMIT 1");
+        $stmt = $this->db->prepare("
+            SELECT u.*, r.name as role_name 
+            FROM user u 
+            JOIN role r ON u.role_id = r.id 
+            WHERE u.email = :email 
+            LIMIT 1
+        ");
         $stmt->execute(['email' => $email]);
         return $stmt->fetch();
     }
@@ -138,5 +144,53 @@ class User {
             'password' => $hashedPassword,
             'id' => $userId
         ]);
+    }
+
+    /**
+     * Encontra o ID do papel de administrador.
+     */
+    public function getAdminRoleId(): int {
+        $stmt = $this->db->prepare("SELECT id FROM role WHERE name = 'admin' LIMIT 1");
+        $stmt->execute();
+        $role = $stmt->fetch();
+        return $role ? (int)$role['id'] : 1;
+    }
+
+    /**
+     * Encontra um usuário por ID.
+     */
+    public function findById(int $id): ?array {
+        $stmt = $this->db->prepare("
+            SELECT u.*, r.name as role_name 
+            FROM user u
+            JOIN role r ON u.role_id = r.id
+            WHERE u.id = :id 
+            LIMIT 1
+        ");
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch();
+        return $result ?: null;
+    }
+
+    /**
+     * Retorna todos os administradores.
+     */
+    public function allAdmins(): array {
+        $adminRoleId = $this->getAdminRoleId();
+        $stmt = $this->db->prepare("SELECT * FROM user WHERE role_id = :role_id ORDER BY name ASC");
+        $stmt->execute(['role_id' => $adminRoleId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Exclui um administrador.
+     */
+    public function deleteAdmin(int $id): bool {
+        $stmt = $this->db->prepare("DELETE FROM user WHERE id = :id");
+        try {
+            return $stmt->execute(['id' => $id]);
+        } catch (Exception $e) {
+            throw new Exception("Erro ao excluir administrador: " . $e->getMessage());
+        }
     }
 }

@@ -35,6 +35,10 @@ spl_autoload_register(function ($class) {
 use App\Core\Router;
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
+use App\Controllers\DashboardController;
+use App\Controllers\AdminController;
+use App\Controllers\ProductController;
+use App\Controllers\AddressController;
 
 $router = new Router();
 
@@ -61,6 +65,43 @@ $router->get('/forgot-password', [AuthController::class, 'showForgotPasswordForm
 $router->post('/forgot-password', [AuthController::class, 'forgotPassword']);
 $router->get('/reset-password', [AuthController::class, 'showResetPasswordForm']);
 $router->post('/reset-password', [AuthController::class, 'resetPassword']);
+
+// ==========================================
+// ROTAS DO PAINEL DE CONTROLE (DASHBOARD)
+// ==========================================
+$router->get('/dashboard', [DashboardController::class, 'index']);
+
+// --- ADMIN: Gerenciamento de Categorias ---
+$router->get('/admin/categories', [AdminController::class, 'listCategories']);
+$router->get('/admin/categories/create', [AdminController::class, 'showCategoryCreate']);
+$router->post('/admin/categories/create', [AdminController::class, 'createCategory']);
+$router->get('/admin/categories/edit', [AdminController::class, 'showCategoryEdit']);
+$router->post('/admin/categories/edit', [AdminController::class, 'updateCategory']);
+$router->get('/admin/categories/delete', [AdminController::class, 'deleteCategory']);
+
+// --- ADMIN: Gerenciamento de Administradores ---
+$router->get('/admin/admins', [AdminController::class, 'listAdmins']);
+$router->get('/admin/admins/create', [AdminController::class, 'showAdminCreate']);
+$router->post('/admin/admins/create', [AdminController::class, 'createAdmin']);
+$router->get('/admin/admins/edit', [AdminController::class, 'showAdminEdit']);
+$router->post('/admin/admins/edit', [AdminController::class, 'updateAdmin']);
+$router->get('/admin/admins/delete', [AdminController::class, 'deleteAdmin']);
+
+// --- SELLER: Gerenciamento de Produtos ---
+$router->get('/seller/products', [ProductController::class, 'listProducts']);
+$router->get('/seller/products/create', [ProductController::class, 'showProductCreate']);
+$router->post('/seller/products/create', [ProductController::class, 'createProduct']);
+$router->get('/seller/products/edit', [ProductController::class, 'showProductEdit']);
+$router->post('/seller/products/edit', [ProductController::class, 'updateProduct']);
+$router->get('/seller/products/delete', [ProductController::class, 'deleteProduct']);
+
+// --- SHARED (SELLER/CLIENT): Gerenciamento de Endereços ---
+$router->get('/dashboard/addresses', [AddressController::class, 'listAddresses']);
+$router->get('/dashboard/addresses/create', [AddressController::class, 'showAddressCreate']);
+$router->post('/dashboard/addresses/create', [AddressController::class, 'createAddress']);
+$router->get('/dashboard/addresses/edit', [AddressController::class, 'showAddressEdit']);
+$router->post('/dashboard/addresses/edit', [AddressController::class, 'updateAddress']);
+$router->get('/dashboard/addresses/delete', [AddressController::class, 'deleteAddress']);
 
 // Resolver Rota Atual
 $router->resolve();

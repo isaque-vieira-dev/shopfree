@@ -204,3 +204,16 @@ CREATE TABLE IF NOT EXISTS password_resets (
 -- =========================
 
 INSERT IGNORE INTO role (name) VALUES ('admin'), ('client'), ('seller');
+
+-- =========================
+-- USUÁRIO ADMINISTRADOR PADRÃO
+-- =========================
+
+-- Senha: admin123
+INSERT IGNORE INTO user (role_id, name, email, password) 
+VALUES (
+    (SELECT id FROM role WHERE name = 'admin' LIMIT 1), 
+    'Administrador', 
+    'admin@shopfree.com', 
+    '$2y$10$BNaU8LSPYA3vJxeHKVdfxOLgky5dU5gl3goiLa9j1PLdpSLZAh6DW'
+);
