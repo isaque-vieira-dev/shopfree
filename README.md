@@ -2,15 +2,41 @@
 
 Plataforma de e-commerce moderna com arquitetura limpa em MVC desenvolvida em PHP e hospedada localmente via Docker.
 
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 Este projeto foi construído utilizando as seguintes tecnologias e conceitos:
 
 - **Backend**: PHP 8.2 (com suporte nativo ao **Composer**).
-- **Banco de Dados**: MySQL 8.0 (com script de migração automática idempotente).
+- **Banco de Dados**: MySQL 8.0 (com script de migração automática idempotente e transações).
 - **Arquitetura**: Padrão **MVC (Model-View-Controller)** simples, com *Front Controller* e *Autoloader* nativo (PSR-4).
 - **Ambiente de Desenvolvimento**: Docker & Docker Compose.
-- **Frontend**: HTML5, Vanilla CSS3 (com design premium, responsivo e paleta de cores roxa/purple), tipografia estilizada com as fontes *Outfit* e *Inter* do Google Fonts, além de ilustrações dinâmicas em formato SVG vetorial.
+- **Frontend**: HTML5, Vanilla CSS3 (com design premium, responsivo, paleta de cores roxa/purple e animações suaves), tipografia estilizada com as fontes *Outfit* e *Inter* do Google Fonts, além de ilustrações dinâmicas em formato SVG vetorial.
+- **Interações**: JavaScript moderno (Fetch API para requisições assíncronas AJAX, animações e atualizações em tempo real).
+
+---
+
+## ✨ Novas Funcionalidades Implementadas
+
+A plataforma foi expandida com recursos completos de um e-commerce moderno:
+
+1. **Catálogo Geral & Filtros Avançados (`/products`)**:
+   * Visualização de todos os produtos com suporte a busca dinâmica por texto e filtros por categorias interativas.
+2. **Página de Detalhes do Produto (`/product`)**:
+   * Exibição de imagem, preço, descrição, controle de estoque dinâmico e botões de ação contextuais (se cliente, adicionar ao carrinho; se vendedor dono do produto, atalho de edição rápida).
+3. **Carrinho de Compras (`/cart`)**:
+   * Dropdown interativo de visualização rápida no header.
+   * Controle de quantidade com verificação de estoque e remoção ágil de itens.
+4. **Gestão de Endereços (`/dashboard/addresses`)**:
+   * Cadastro, edição, exclusão e definição de endereço de entrega padrão.
+   * Seleção facilitada do endereço na tela do carrinho.
+5. **Simulador de Checkout & Pagamentos (`/checkout/payment`)**:
+   * Tela de fechamento com suporte simulado para Cartão de Crédito, Pix (com QR Code fictício) e Boleto.
+   * Transação segura no banco de dados com abatimento de estoque automático e tela de sucesso (`/checkout/success`).
+6. **Histórico de Pedidos e Alteração de Status (`/dashboard/orders`)**:
+   * Visualização de compras e status atualizado em tempo real para clientes.
+   * Painel de gerenciamento de vendas com alteração de status via AJAX para vendedores.
 
 ---
 
@@ -24,107 +50,53 @@ Você precisará ter instalado em sua máquina:
 ### Passo a Passo
 
 1. **Subir os Containers**:
-   Abra o seu terminal na raiz do projeto e execute o comando abaixo para construir as imagens e iniciar os serviços em segundo plano:
+   Abra o seu terminal na raiz do projeto e execute o comando abaixo para construir as imagens e iniciar os serviços:
    ```bash
    docker compose up -d --build
    ```
 
 2. **Acessar a Aplicação**:
-   Abra seu navegador e digite a URL:
+   Abra seu navegador e acesse:
    👉 **[http://localhost:8080](http://localhost:8080)**
 
-3. **Popular o Banco de Dados (Opcional - Seeder)**:
-   Para popular o banco com as categorias (*Eletrônicos*, *Roupas & Acessórios*, *Casa & Decoração*) e os produtos de teste nos carrosséis da tela inicial, execute:
-   - **Via Docker (Recomendado)**:
-     ```bash
-     docker compose exec web php database/productsSeeder.php
-     ```
-   - **Localmente**:
-     ```bash
-     php database/productsSeeder.php
-     ```
+3. **Popular o Banco de Dados (Seeder)**:
+   Para carregar categorias de teste, produtos e as imagens correspondentes nos carrosséis, execute:
+   ```bash
+   docker compose exec web php database/productsSeeder.php
+   ```
 
-4. **Verificar Banco de Dados**:
-   Ao iniciar o container do banco pela primeira vez, o Docker executará automaticamente as instruções contidas no arquivo `database/initial-database.sql`, que cria as tabelas necessárias (`role`, `user`, `address`, `category`, `product`, `cart`, `cart_item`, `orders` e `order_item`) e insere os níveis de acesso padrão (`admin`, `client`, `seller`), além de agora também carregar os registros iniciais configurados no arquivo SQL.
-
-5. **Para parar o ambiente**:
+4. **Para parar o ambiente**:
    ```bash
    docker compose down
    ```
 
 ---
 
-## 📦 Utilizando o Composer no Docker
+## 🔐 Contas e Credenciais de Teste
 
-O Composer está instalado dentro do container do PHP (`web`). Para rodar comandos do Composer sem precisar instalar a ferramenta localmente, execute:
+Para navegar pelos diferentes perfis do sistema, utilize os seguintes usuários de teste:
 
-```bash
-docker compose exec web composer <comando>
-```
-
-*Exemplos de uso:*
-```bash
-# Para instalar dependências:
-docker compose exec web composer install
-
-# Para adicionar um pacote (ex: vlucas/phpdotenv):
-docker compose exec web composer require vlucas/phpdotenv
-```
+* **Administrador**:
+  * **E-mail**: `admin@shopfree.com` | **Senha**: `admin123`
+* **Vendedor (Fornecedor)**:
+  * **E-mail**: `vendedor@shopfree.com` | **Senha**: `vendedor123`
+* **Cliente**:
+  * **E-mail**: `cliente@shopfree.com` | **Senha**: `cliente123` *(ou crie um novo cadastro na hora)*
 
 ---
 
-## 🔐 Sistema de Autenticação e Níveis de Acesso
-
-O ShopFree possui um sistema completo de autenticação e controle de níveis de acesso (RBAC - Role-Based Access Control). O tipo do usuário conectado (Administrador, Vendedor ou Usuário comum) é exibido diretamente no cabeçalho do site, abaixo de seu nome.
-
-### Níveis de Acesso Disponíveis:
-- **Administrador (admin)**: Usuário com permissões de gestão do sistema.
-- **Vendedor (seller)**: Usuários que podem anunciar seus próprios produtos na plataforma.
-- **Usuário (client)**: Clientes comuns que podem navegar e efetuar compras.
-
-### Funcionalidades do Sistema de Autenticação:
-- **Login / Logout**: Autenticação com sessão persistente.
-- **Cadastro Geral**: Cadastro de clientes normais (`client`).
-- **Cadastro de Vendedores**: Cadastro dedicado a vendedores (`seller`), disponível no link "Anuncie seus produtos".
-- **Recuperação de Senha**: Fluxo completo de simulação de alteração de senha ("Esqueci minha senha") via token com tempo de expiração de 1 hora.
-
----
-
-## 👤 Credenciais do Administrador Padrão
-
-Para testar o painel administrativo ou as funções restritas, você pode fazer login utilizando o usuário administrador inicial criado automaticamente:
-
-- **E-mail**: `admin@shopfree.com`
-- **Senha**: `admin123`
-
----
-
-## 🗄️ Conexão ao Banco de Dados (MySQL)
-
-Se desejar conectar ao banco de dados usando ferramentas externas (como TablePlus, DBeaver ou VS Code Database Extension), utilize as seguintes credenciais:
-
-- **Host**: `localhost` (ou `db` de dentro da rede do Docker)
-- **Porta**: `3306`
-- **Banco de Dados**: `shopfree`
-- **Usuário**: `shopfree_user`
-- **Senha**: `shopfree_password`
-- **Senha Root**: `root_password`
-
----
-
-## 📂 Estrutura de Diretórios
+## 📂 Estrutura de Diretórios Atualizada
 
 ```
 shopfree/
 ├── app/
-│   ├── Controllers/    # Controladores (Home, Contato, Sobre Nós, Autenticação)
-│   ├── Core/           # Núcleo do sistema (Roteador simples)
-│   ├── Models/         # Modelos e Conexão (Database via PDO, User)
-│   └── Views/          # Telas (Home, Contato, Sobre Nós, Telas de Auth e layouts)
-├── database/           # Scripts SQL de inicialização do banco
-├── .htaccess           # Regras de reescrita para suporte a URLs amigáveis
-├── config.php          # Configurações globais e credenciais do banco
-├── Dockerfile          # Configuração da imagem PHP 8.2 + Apache + Composer
-├── docker-compose.yml  # Definição e integração dos containers Docker
-└── index.php           # Front Controller (Entrada de rotas e Autoloader)
+│   ├── Controllers/    # Controladores (Home, Auth, Product, Cart, Address, Dashboard)
+│   ├── Core/           # Roteador básico e infraestrutura
+│   ├── Models/         # Modelos de negócios (Database, User, Product, Category, Address, Order)
+│   └── Views/          # Telas estruturadas (Home, Product, Cart, Checkout, Auth, Dashboard, Layouts)
+├── database/           # Scripts SQL de estrutura e seeder de produtos
+├── config.php          # Configurações de ambiente e credenciais
+├── INSTRUCOES.md       # Manual detalhado de funcionamento do sistema
+├── docker-compose.yml  # Configuração dos containers do Docker
+└── index.php           # Front Controller e autoloader nativo
 ```

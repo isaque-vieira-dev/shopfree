@@ -15,6 +15,26 @@ class DashboardController {
 
     public function index(): void {
         $pageTitle = "Painel de Controle";
+        $roleName = $_SESSION['role_name'] ?? '';
+        $roleId = $_SESSION['role_id'] ?? 0;
+        $recentOrders = [];
+
+        if ($roleName === 'Usuário' || $roleId == 2) {
+            $orderModel = new \App\Models\Order();
+            $recentOrders = $orderModel->getByUser((int)$_SESSION['user_id']);
+            $recentOrders = array_slice($recentOrders, 0, 3);
+            foreach ($recentOrders as &$order) {
+                $order['items'] = $orderModel->getItems((int)$order['id']);
+            }
+        } elseif ($roleName === 'Vendedor' || $roleId == 3) {
+            $orderModel = new \App\Models\Order();
+            $recentOrders = $orderModel->getBySeller((int)$_SESSION['user_id']);
+            $recentOrders = array_slice($recentOrders, 0, 3);
+            foreach ($recentOrders as &$order) {
+                $order['items'] = $orderModel->getItemsBySeller((int)$order['id'], (int)$_SESSION['user_id']);
+            }
+        }
+
         require_once __DIR__ . '/../Views/dashboard/index.php';
     }
 
