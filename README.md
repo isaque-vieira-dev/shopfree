@@ -33,10 +33,21 @@ Você precisará ter instalado em sua máquina:
    Abra seu navegador e digite a URL:
    👉 **[http://localhost:8080](http://localhost:8080)**
 
-3. **Verificar Banco de Dados**:
-   Ao iniciar o container do banco pela primeira vez, o Docker executará automaticamente as instruções contidas no arquivo `database/initial-database.sql`, que cria as tabelas necessárias (`role`, `user`, `address`, `category`, `product`, `cart`, `cart_item`, `orders` e `order_item`) e insere os níveis de acesso padrão (`admin`, `client`, `seller`).
+3. **Popular o Banco de Dados (Opcional - Seeder)**:
+   Para popular o banco com as categorias (*Eletrônicos*, *Roupas & Acessórios*, *Casa & Decoração*) e os produtos de teste nos carrosséis da tela inicial, execute:
+   - **Via Docker (Recomendado)**:
+     ```bash
+     docker compose exec web php database/productsSeeder.php
+     ```
+   - **Localmente**:
+     ```bash
+     php database/productsSeeder.php
+     ```
 
-4. **Para parar o ambiente**:
+4. **Verificar Banco de Dados**:
+   Ao iniciar o container do banco pela primeira vez, o Docker executará automaticamente as instruções contidas no arquivo `database/initial-database.sql`, que cria as tabelas necessárias (`role`, `user`, `address`, `category`, `product`, `cart`, `cart_item`, `orders` e `order_item`) e insere os níveis de acesso padrão (`admin`, `client`, `seller`), além de agora também carregar os registros iniciais configurados no arquivo SQL.
+
+5. **Para parar o ambiente**:
    ```bash
    docker compose down
    ```

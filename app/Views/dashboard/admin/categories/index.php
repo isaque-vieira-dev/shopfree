@@ -28,6 +28,7 @@
         <thead>
             <tr style="border-bottom: 1px solid var(--border-color); background: var(--bg-base);">
                 <th style="padding: 18px 24px; font-family: var(--font-outfit); font-weight: 700; color: var(--text-color); width: 80px;">ID</th>
+                <th style="padding: 18px 24px; font-family: var(--font-outfit); font-weight: 700; color: var(--text-color); width: 80px;">Imagem</th>
                 <th style="padding: 18px 24px; font-family: var(--font-outfit); font-weight: 700; color: var(--text-color);">Nome da Categoria</th>
                 <th style="padding: 18px 24px; font-family: var(--font-outfit); font-weight: 700; color: var(--text-color); width: 150px; text-align: right;">Ações</th>
             </tr>
@@ -35,18 +36,25 @@
         <tbody>
             <?php if (empty($categories)): ?>
                 <tr>
-                    <td colspan="3" style="padding: 30px; text-align: center; color: var(--text-muted);">Nenhuma categoria cadastrada ainda.</td>
+                    <td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">Nenhuma categoria cadastrada ainda.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($categories as $cat): ?>
                     <tr style="border-bottom: 1px solid var(--border-color); transition: background-color 0.15s ease;" onmouseover="this.style.backgroundColor='rgba(0, 0, 0, 0.01)'" onmouseout="this.style.backgroundColor='transparent'">
                         <td style="padding: 18px 24px; color: var(--text-muted); font-weight: 600;"><?php echo $cat['id']; ?></td>
+                        <td style="padding: 18px 24px;">
+                            <?php if (!empty($cat['image_path'])): ?>
+                                <img src="<?php echo htmlspecialchars($cat['image_path']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>" style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <?php else: ?>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">Sem Imagem</span>
+                            <?php endif; ?>
+                        </td>
                         <td style="padding: 18px 24px; font-weight: 600; color: var(--text-color);"><?php echo htmlspecialchars($cat['name']); ?></td>
-                        <td style="padding: 18px 24px; text-align: right; display: flex; justify-content: flex-end; gap: 12px;">
-                            <a href="/admin/categories/edit?id=<?php echo $cat['id']; ?>" style="color: var(--accent-purple); text-decoration: none; font-weight: 600; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-purple-hover)'" onmouseout="this.style.color='var(--accent-purple)'" title="Editar">
+                        <td style="padding: 18px 24px; text-align: right; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
+                            <a href="/admin/categories/edit?id=<?php echo $cat['id']; ?>" style="color: var(--accent-purple); text-decoration: none; font-weight: 600; transition: color 0.2s; display: inline-flex;" onmouseover="this.style.color='var(--accent-purple-hover)'" onmouseout="this.style.color='var(--accent-purple)'" title="Editar">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                             </a>
-                            <a href="/admin/categories/delete?id=<?php echo $cat['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta categoria?');" style="color: #ef4444; text-decoration: none; font-weight: 600; transition: color 0.2s;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='#ef4444'" title="Excluir">
+                            <a href="/admin/categories/delete?id=<?php echo $cat['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir esta categoria?');" style="color: #ef4444; text-decoration: none; font-weight: 600; transition: color 0.2s; display: inline-flex;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='#ef4444'" title="Excluir">
                                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                             </a>
                         </td>

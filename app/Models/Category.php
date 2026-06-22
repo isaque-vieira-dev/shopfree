@@ -33,10 +33,13 @@ class Category {
     /**
      * Cria uma nova categoria.
      */
-    public function create(string $name): bool {
-        $stmt = $this->db->prepare("INSERT INTO category (name) VALUES (:name)");
+    public function create(string $name, ?string $imagePath = null): bool {
+        $stmt = $this->db->prepare("INSERT INTO category (name, image_path) VALUES (:name, :image_path)");
         try {
-            return $stmt->execute(['name' => trim($name)]);
+            return $stmt->execute([
+                'name' => trim($name),
+                'image_path' => $imagePath
+            ]);
         } catch (Exception $e) {
             throw new Exception("Erro ao criar categoria: " . $e->getMessage());
         }
@@ -45,12 +48,13 @@ class Category {
     /**
      * Atualiza uma categoria existente.
      */
-    public function update(int $id, string $name): bool {
-        $stmt = $this->db->prepare("UPDATE category SET name = :name WHERE id = :id");
+    public function update(int $id, string $name, ?string $imagePath = null): bool {
+        $stmt = $this->db->prepare("UPDATE category SET name = :name, image_path = :image_path WHERE id = :id");
         try {
             return $stmt->execute([
                 'id' => $id,
-                'name' => trim($name)
+                'name' => trim($name),
+                'image_path' => $imagePath
             ]);
         } catch (Exception $e) {
             throw new Exception("Erro ao atualizar categoria: " . $e->getMessage());

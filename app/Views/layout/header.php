@@ -197,25 +197,27 @@
             $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $isContact = (strpos($uri, 'contact') !== false || strpos($uri, 'contato') !== false);
             $isAbout = (strpos($uri, 'about') !== false || strpos($uri, 'sobre') !== false);
-            $isHome = (!$isContact && !$isAbout);
+            $isCategories = (strpos($uri, 'categories') !== false || strpos($uri, 'categorias') !== false);
+            $isProducts = (strpos($uri, 'products') !== false || strpos($uri, 'produtos') !== false);
+            $isHome = (!$isContact && !$isAbout && !$isCategories && !$isProducts);
             ?>
             <ul class="nav-links">
                 <li><a href="/" class="<?php echo $isHome ? 'active' : ''; ?>">Home</a></li>
                 <li><a href="/about" class="<?php echo $isAbout ? 'active' : ''; ?>">Sobre nos</a></li>
-                <li><a href="/#shop">Produtos</a></li>
-                <li><a href="/#pages">Categorias</a></li>
+                <li><a href="/products" class="<?php echo $isProducts ? 'active' : ''; ?>">Produtos</a></li>
+                <li><a href="/categories" class="<?php echo $isCategories ? 'active' : ''; ?>">Categorias</a></li>
                 <li><a href="/contact" class="<?php echo $isContact ? 'active' : ''; ?>">Contato</a></li>
                 <li><a href="/seller" class="<?php echo ($uri === '/seller') ? 'active' : ''; ?>">Anuncie seus produtos</a></li>
             </ul>
 
             <div class="nav-actions">
                 <!-- Barra de Busca -->
-                <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search...">
-                    <button class="search-button">
+                <form action="/products" method="GET" class="search-container" style="margin: 0;">
+                    <input type="text" name="search" class="search-input" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" placeholder="Search...">
+                    <button type="submit" class="search-button">
                         <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </button>
-                </div>
+                </form>
 
                 <!-- Carrinho (Ocultado conforme solicitação) -->
                 <button class="icon-btn" aria-label="Cart" style="display: none;">

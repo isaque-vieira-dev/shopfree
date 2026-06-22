@@ -57,7 +57,6 @@ class ProductController {
         $price = (float)($_POST['price'] ?? 0.0);
         $stock = (int)($_POST['stock'] ?? 0);
         $description = trim($_POST['description'] ?? '');
-        $imagePath = trim($_POST['image_path'] ?? '');
 
         if (empty($name) || $categoryId <= 0 || $price <= 0) {
             $_SESSION['product_error'] = "Nome, categoria e preço válido são obrigatórios.";
@@ -66,6 +65,9 @@ class ProductController {
         }
 
         try {
+            $uploadedPath = $this->handleImageUpload();
+            $imagePath = $uploadedPath ?? trim($_POST['image_path'] ?? '');
+
             $this->productModel->create([
                 'user_id' => $_SESSION['user_id'],
                 'category_id' => $categoryId,
@@ -127,7 +129,6 @@ class ProductController {
         $price = (float)($_POST['price'] ?? 0.0);
         $stock = (int)($_POST['stock'] ?? 0);
         $description = trim($_POST['description'] ?? '');
-        $imagePath = trim($_POST['image_path'] ?? '');
 
         if (empty($name) || $categoryId <= 0 || $price <= 0) {
             $_SESSION['product_error'] = "Nome, categoria e preço válido são obrigatórios.";
@@ -136,6 +137,9 @@ class ProductController {
         }
 
         try {
+            $uploadedPath = $this->handleImageUpload();
+            $imagePath = $uploadedPath ?? trim($_POST['image_path'] ?? '');
+
             $this->productModel->update($id, [
                 'user_id' => $_SESSION['user_id'],
                 'category_id' => $categoryId,
@@ -172,5 +176,63 @@ class ProductController {
 
         header('Location: /seller/products');
         exit;
+    }
+
+    /**
+     * Valida e salva o upload de imagem de um produto.
+     * Retorna o caminho público do arquivo ou null se não houver upload.
+     */
+    private function handleImageUpload(): ?string {
+        if (!isset($_FILES['image_file']) || $_FILES['image_file']['error'] === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        $file = $_FILES['image_file'];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("Erro no upload do arquivo (Código " . $file['error'] . ").");
+        }
+
+        // Validar tamanho (5MB)
+        if ($file['size'] > 5 * 1024 * 1024) {
+            throw new Exception("O tamanho máximo permitido para imagem é de 5MB.");
+        }
+
+        // Validar tipo do arquivo
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!file_exists($file['tmp_name'])) {
+            throw new Exception("Arquivo temporário não encontrado.");
+        }
+        $fileMimeType = mime_content_type($file['tmp_name']);
+        if (!in_array($fileMimeType, $allowedMimeTypes)) {
+            throw new Exception("Tipo de arquivo inválido. Apenas JPG, PNG, GIF e WEBP são permitidos.");
+        }
+
+        // Obter extensão
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        if (empty($extension)) {
+            $extension = str_replace('image/', '', $fileMimeType);
+            if ($extension === 'jpeg') {
+                $extension = 'jpg';
+            }
+        }
+
+        // Garantir que a pasta de uploads existe
+        $uploadDir = __DIR__ . '/../../uploads/';
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                throw new Exception("Erro ao criar a pasta de uploads.");
+            }
+        }
+
+        // Gerar nome único e seguro
+        $newFilename = uniqid('prod_', true) . '.' . $extension;
+        $destPath = $uploadDir . $newFilename;
+
+        if (!move_uploaded_file($file['tmp_name'], $destPath)) {
+            throw new Exception("Erro ao salvar o arquivo no servidor.");
+        }
+
+        return '/uploads/' . $newFilename;
     }
 }

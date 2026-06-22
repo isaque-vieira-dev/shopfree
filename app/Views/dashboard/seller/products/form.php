@@ -14,7 +14,7 @@
     </div>
 <?php endif; ?>
 
-<form action="<?php echo $action; ?>" method="POST" style="max-width: 600px; display: flex; flex-direction: column; gap: 20px;">
+<form action="<?php echo $action; ?>" method="POST" enctype="multipart/form-data" style="max-width: 600px; display: flex; flex-direction: column; gap: 20px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div style="display: flex; flex-direction: column; gap: 8px;">
             <label for="name" style="font-family: var(--font-outfit); font-weight: 600; font-size: 0.9rem; color: var(--text-color);">Nome do Produto *</label>
@@ -46,9 +46,26 @@
         </div>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-        <label for="image_path" style="font-family: var(--font-outfit); font-weight: 600; font-size: 0.9rem; color: var(--text-color);">URL da Imagem</label>
-        <input type="text" id="image_path" name="image_path" value="<?php echo htmlspecialchars($product['image_path'] ?? ''); ?>" placeholder="https://exemplo.com/imagem.jpg" style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-family: var(--font-inter); font-size: 0.95rem; outline: none; transition: border-color 0.25s ease;" onfocus="this.style.borderColor='var(--accent-purple)'" onblur="this.style.borderColor='var(--border-color)'">
+    <?php if (isset($product['image_path']) && !empty($product['image_path'])): ?>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: var(--font-outfit); font-weight: 600; font-size: 0.9rem; color: var(--text-color);">Imagem Atual</span>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color);">
+                <span style="font-size: 0.85rem; color: var(--text-muted); word-break: break-all;"><?php echo htmlspecialchars($product['image_path']); ?></span>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="image_file" style="font-family: var(--font-outfit); font-weight: 600; font-size: 0.9rem; color: var(--text-color);">Upload de Imagem</label>
+            <input type="file" id="image_file" name="image_file" accept="image/*" style="width: 100%; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); font-family: var(--font-inter); font-size: 0.9rem; outline: none; background: #ffffff; cursor: pointer;">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="image_path" style="font-family: var(--font-outfit); font-weight: 600; font-size: 0.9rem; color: var(--text-color);">Ou URL da Imagem</label>
+            <input type="text" id="image_path" name="image_path" value="<?php echo htmlspecialchars($product['image_path'] ?? ''); ?>" placeholder="https://exemplo.com/imagem.jpg" style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); font-family: var(--font-inter); font-size: 0.95rem; outline: none; transition: border-color 0.25s ease;" onfocus="this.style.borderColor='var(--accent-purple)'" onblur="this.style.borderColor='var(--border-color)'">
+        </div>
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 8px;">

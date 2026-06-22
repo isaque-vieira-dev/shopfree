@@ -101,4 +101,51 @@ class Product {
             throw new Exception("Erro ao excluir produto: " . $e->getMessage());
         }
     }
+
+    /**
+     * Retorna produtos de uma categoria específica.
+     */
+    public function getByCategory(int $categoryId, int $limit = 10): array {
+        $stmt = $this->db->prepare("
+            SELECT p.*, c.name as category_name 
+            FROM product p
+            LEFT JOIN category c ON p.category_id = c.id
+            WHERE p.category_id = :category_id
+            ORDER BY p.id DESC
+            LIMIT :limit
+        ");
+        $stmt->bindValue(':category_id', $categoryId, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Filtra e pesquisa produtos por categoria e/ou nome.
+     */
+    public function search(?int $categoryId = null, ?string $search = null): array {
+        $sql = "
+            SELECT p.*, c.name as category_name 
+            FROM product p
+            LEFT JOIN category c ON p.category_id = c.id
+            WHERE 1=1
+        ";
+        $params = [];
+
+        if ($categoryId !== null && $categoryId > 0) {
+            $sql .= " AND p.category_id = :category_id";
+            $params['category_id'] = $categoryId;
+        }
+
+        if ($search !== null && trim($search) !== '') {
+            $sql .= " AND p.name LIKE :search";
+            $params['search'] = '%' . trim($search) . '%';
+        }
+
+        $sql .= " ORDER BY p.id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

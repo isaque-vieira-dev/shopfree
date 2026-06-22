@@ -9,7 +9,7 @@
             Bem-vindo ao ShopFree, o seu destino definitivo para moda e estilo online. Descubra as últimas tendências, selecione seus itens favoritos e receba tudo no conforto da sua casa.
         </p>
         <div class="hero-buttons">
-            <a href="#shop" class="btn btn-solid">COMPRE AGORA &gt;</a>
+            <a href="/products" class="btn btn-solid">COMPRE AGORA &gt;</a>
         </div>
     </div>
     
@@ -94,6 +94,112 @@
         </div>
     </div>
 </section>
+
+<!-- Seção de Carrossel de Categorias -->
+<?php if (!empty($allCategories)): ?>
+    <section class="categories-showcase-section">
+        <div class="carousel-header">
+            <h2 class="category-title">Navegue por Categoria</h2>
+            <div class="carousel-nav-buttons">
+                <button class="nav-btn prev-btn" onclick="slideCategoriesCarousel(-1)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="nav-btn next-btn" onclick="slideCategoriesCarousel(1)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="categories-carousel-container">
+            <div class="categories-carousel-track" id="categories-carousel-track">
+                <?php foreach ($allCategories as $cat): ?>
+                    <a href="/products?category_id=<?php echo $cat['id']; ?>" class="category-card-pill">
+                        <div class="category-icon-wrapper">
+                            <?php if (!empty($cat['image_path'])): ?>
+                                <img src="<?php echo htmlspecialchars($cat['image_path']); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                            <?php else: ?>
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            <?php endif; ?>
+                        </div>
+                        <span class="category-pill-name"><?php echo htmlspecialchars($cat['name']); ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
+
+<!-- Seções de Carrosséis de Produtos por Categoria -->
+<?php if (!empty($carousels)): ?>
+    <section class="storefront-section" id="shop">
+        <?php foreach ($carousels as $index => $carousel): ?>
+            <div class="category-carousel-block">
+                <div class="carousel-header">
+                    <h2 class="category-title"><?php echo htmlspecialchars($carousel['category']['name']); ?></h2>
+                    <div class="carousel-nav-buttons">
+                        <button class="nav-btn prev-btn" onclick="slideCarousel(<?php echo $index; ?>, -1)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <button class="nav-btn next-btn" onclick="slideCarousel(<?php echo $index; ?>, 1)">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="carousel-track-container">
+                    <div class="carousel-track" id="carousel-track-<?php echo $index; ?>">
+                        <?php foreach ($carousel['products'] as $product): ?>
+                            <div class="product-card">
+                                <div class="product-image-wrapper">
+                                    <?php if (!empty($product['image_path'])): ?>
+                                        <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" loading="lazy">
+                                    <?php else: ?>
+                                        <div class="no-image-placeholder">Sem Imagem</div>
+                                    <?php endif; ?>
+                                    <span class="product-badge"><?php echo htmlspecialchars($carousel['category']['name']); ?></span>
+                                </div>
+                                <div class="product-details">
+                                    <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                    <p class="product-description"><?php echo htmlspecialchars(mb_strimwidth($product['description'], 0, 80, "...")); ?></p>
+                                    <div class="product-footer">
+                                        <span class="product-price">R$ <?php echo number_format($product['price'], 2, ',', '.'); ?></span>
+                                        <button class="add-to-cart-btn" aria-label="Comprar">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </section>
+<?php endif; ?>
+
+<script>
+function slideCarousel(index, direction) {
+    const track = document.getElementById('carousel-track-' + index);
+    if (track) {
+        const scrollAmount = 304 * 2; // Scroll 2 cards
+        track.parentElement.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+}
+
+function slideCategoriesCarousel(direction) {
+    const track = document.getElementById('categories-carousel-track');
+    if (track) {
+        const scrollAmount = 240 * 2; // Scroll 2 items
+        track.parentElement.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+}
+</script>
 
 <style>
     /* Estilos da Seção Hero */
@@ -292,6 +398,294 @@
         .chair-svg {
             max-width: 340px;
         }
+    }
+
+    /* Estilos dos Carrosséis de Produtos */
+    .storefront-section {
+        padding: 40px 8% 80px 8%;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .category-carousel-block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .carousel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 12px;
+    }
+
+    .category-title {
+        font-family: var(--font-outfit);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-color);
+        position: relative;
+    }
+
+    .category-title::after {
+        content: '';
+        position: absolute;
+        bottom: -14px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-purple);
+        border-radius: 2px;
+    }
+
+    .carousel-nav-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .nav-btn {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--text-color);
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .nav-btn:hover {
+        background-color: var(--accent-purple);
+        color: #ffffff;
+        border-color: var(--accent-purple);
+        transform: scale(1.05);
+    }
+
+    .carousel-track-container {
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+        scroll-behavior: smooth;
+        padding: 10px 0;
+    }
+
+    .carousel-track-container::-webkit-scrollbar {
+        display: none; /* Safari/Chrome */
+    }
+
+    .carousel-track {
+        display: flex;
+        gap: 24px;
+    }
+
+    .product-card {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        width: 280px;
+        flex-shrink: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(124, 58, 237, 0.08);
+        border-color: rgba(124, 58, 237, 0.15);
+    }
+
+    .product-image-wrapper {
+        position: relative;
+        height: 220px;
+        width: 100%;
+        background-color: #f5f5f5;
+        overflow: hidden;
+    }
+
+    .product-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image-wrapper img {
+        transform: scale(1.05);
+    }
+
+    .no-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-outfit);
+        font-weight: 500;
+        color: var(--text-muted);
+        background-color: #eaeaea;
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: var(--text-color);
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-family: var(--font-outfit);
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        backdrop-filter: blur(4px);
+    }
+
+    .product-details {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-grow: 1;
+    }
+
+    .product-name {
+        font-family: var(--font-outfit);
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-description {
+        font-family: var(--font-inter);
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 38px;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 12px;
+    }
+
+    .product-price {
+        font-family: var(--font-outfit);
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--accent-purple);
+    }
+
+    .add-to-cart-btn {
+        background-color: var(--accent-purple-light);
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--accent-purple);
+        transition: all 0.25s ease;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: var(--accent-purple);
+        color: #ffffff;
+        transform: scale(1.08);
+    }
+
+    /* Estilos do Carrossel de Categorias */
+    .categories-showcase-section {
+        padding: 60px 8% 0 8%;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .categories-carousel-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+        padding: 10px 0;
+    }
+
+    .categories-carousel-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .categories-carousel-track {
+        display: flex;
+        gap: 16px;
+    }
+
+    .category-card-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        padding: 12px 22px;
+        border-radius: 40px;
+        text-decoration: none;
+        color: var(--text-color);
+        font-family: var(--font-outfit);
+        font-weight: 600;
+        font-size: 0.92rem;
+        flex-shrink: 0;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+    }
+
+    .category-card-pill:hover {
+        border-color: var(--accent-purple);
+        color: var(--accent-purple);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.08);
+    }
+
+    .category-icon-wrapper {
+        background-color: var(--accent-purple-light);
+        color: var(--accent-purple);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.25s ease;
+        overflow: hidden;
+    }
+
+    .category-card-pill:hover .category-icon-wrapper {
+        background-color: var(--accent-purple);
+        color: #ffffff;
     }
 </style>
 

@@ -48,7 +48,10 @@ $router->get('/contact', [HomeController::class, 'contact']);
 $router->get('/contato', [HomeController::class, 'contact']);
 $router->get('/about', [HomeController::class, 'about']);
 $router->get('/sobre', [HomeController::class, 'about']);
-
+$router->get('/categories', [HomeController::class, 'categories']);
+$router->get('/categorias', [HomeController::class, 'categories']);
+$router->get('/products', [HomeController::class, 'products']);
+$router->get('/produtos', [HomeController::class, 'products']);
 // Rotas de Autenticação
 $router->get('/login', [AuthController::class, 'showLoginForm']);
 $router->post('/login', [AuthController::class, 'login']);
