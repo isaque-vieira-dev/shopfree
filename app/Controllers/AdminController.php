@@ -15,7 +15,6 @@ class AdminController {
             session_start();
         }
         
-        // Verificar autenticação e se é Administrador
         if (!isset($_SESSION['user_id']) || ($_SESSION['role_name'] !== 'Administrador' && $_SESSION['role_id'] != 1)) {
             $_SESSION['dashboard_error'] = "Acesso negado. Apenas administradores podem acessar esta área.";
             header('Location: /dashboard');
@@ -25,10 +24,6 @@ class AdminController {
         $this->categoryModel = new Category();
         $this->userModel = new User();
     }
-
-    /* ==========================================
-       CRUD DE CATEGORIAS
-       ========================================== */
 
     public function listCategories(): void {
         $pageTitle = "Gerenciar Categorias";
@@ -144,10 +139,6 @@ class AdminController {
         exit;
     }
 
-    /* ==========================================
-       CRUD DE ADMINISTRADORES
-       ========================================== */
-
     public function listAdmins(): void {
         $pageTitle = "Gerenciar Administradores";
         $admins = $this->userModel->allAdmins();
@@ -255,12 +246,10 @@ class AdminController {
         }
 
         try {
-            // Atualizar o nome do administrador no banco
             $db = \App\Models\Database::getConnection();
             $stmt = $db->prepare("UPDATE user SET name = :name WHERE id = :id");
             $stmt->execute(['name' => $name, 'id' => $id]);
 
-            // Atualizar a senha se uma nova foi fornecida
             if (!empty($password)) {
                 if (strlen($password) < 6) {
                     $_SESSION['admin_error'] = "A nova senha deve ter pelo menos 6 caracteres.";
@@ -270,7 +259,6 @@ class AdminController {
                 $this->userModel->updatePassword($id, $password);
             }
 
-            // Atualizar o nome do usuário logado se for ele mesmo
             if ($id === (int)$_SESSION['user_id']) {
                 $_SESSION['user_name'] = $name;
             }
@@ -292,7 +280,6 @@ class AdminController {
             exit;
         }
 
-        // Impedir que o admin logado se exclua
         if ($id === (int)$_SESSION['user_id']) {
             $_SESSION['admin_error'] = "Você não pode excluir a sua própria conta.";
             header('Location: /admin/admins');
@@ -310,10 +297,6 @@ class AdminController {
         exit;
     }
 
-    /**
-     * Valida e salva o upload de imagem de uma categoria.
-     * Retorna o caminho público do arquivo ou null se não houver upload.
-     */
     private function handleImageUpload(): ?string {
         if (!isset($_FILES['image_file']) || $_FILES['image_file']['error'] === UPLOAD_ERR_NO_FILE) {
             return null;
@@ -325,12 +308,10 @@ class AdminController {
             throw new Exception("Erro no upload do arquivo (Código " . $file['error'] . ").");
         }
 
-        // Validar tamanho (5MB)
         if ($file['size'] > 5 * 1024 * 1024) {
             throw new Exception("O tamanho máximo permitido para imagem é de 5MB.");
         }
 
-        // Validar tipo do arquivo
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!file_exists($file['tmp_name'])) {
             throw new Exception("Arquivo temporário não encontrado.");
@@ -340,7 +321,6 @@ class AdminController {
             throw new Exception("Tipo de arquivo inválido. Apenas JPG, PNG, GIF e WEBP são permitidos.");
         }
 
-        // Obter extensão
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         if (empty($extension)) {
             $extension = str_replace('image/', '', $fileMimeType);
@@ -349,7 +329,6 @@ class AdminController {
             }
         }
 
-        // Garantir que a pasta de uploads existe
         $uploadDir = __DIR__ . '/../../uploads/';
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {
@@ -357,7 +336,6 @@ class AdminController {
             }
         }
 
-        // Gerar nome único e seguro
         $newFilename = uniqid('cat_', true) . '.' . $extension;
         $destPath = $uploadDir . $newFilename;
 

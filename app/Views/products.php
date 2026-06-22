@@ -1,6 +1,5 @@
 <?php require_once __DIR__ . '/layout/header.php'; ?>
 
-<!-- Banner Superior -->
 <section class="products-banner">
     <div class="banner-overlay"></div>
     <div class="banner-content">
@@ -9,14 +8,11 @@
     </div>
 </section>
 
-<!-- Catálogo de Produtos e Filtros -->
 <section class="products-catalog-section">
     <div class="catalog-container">
-        <!-- Barra Lateral de Filtros -->
         <aside class="filters-sidebar">
             <h2 class="filters-title">Filtros</h2>
             <form action="/products" method="GET" class="filters-form">
-                <!-- Filtro de Busca por Nome -->
                 <div class="filter-group">
                     <label for="search">Pesquisar por Nome</label>
                     <div class="search-input-wrapper">
@@ -24,7 +20,6 @@
                     </div>
                 </div>
 
-                <!-- Filtro de Categorias -->
                 <div class="filter-group">
                     <label for="category_id">Categoria</label>
                     <select id="category_id" name="category_id">
@@ -37,7 +32,6 @@
                     </select>
                 </div>
 
-                <!-- Botões de Ação -->
                 <div class="filter-actions">
                     <button type="submit" class="btn-filter-submit">Filtrar Resultados</button>
                     <?php if ($categoryId !== null || $search !== null): ?>
@@ -47,7 +41,6 @@
             </form>
         </aside>
 
-        <!-- Grade de Produtos -->
         <main class="products-display-area">
             <div class="results-header">
                 <p class="results-count">
@@ -66,22 +59,29 @@
                 <div class="products-grid">
                     <?php foreach ($products as $product): ?>
                         <div class="product-card">
-                            <div class="product-image-wrapper">
-                                <?php if (!empty($product['image_path'])): ?>
-                                    <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" loading="lazy">
-                                <?php else: ?>
-                                    <div class="no-image-placeholder">Sem Imagem</div>
-                                <?php endif; ?>
-                                <span class="product-badge"><?php echo htmlspecialchars($product['category_name'] ?? 'Produto'); ?></span>
-                            </div>
+                            <a href="/product?id=<?php echo $product['id']; ?>" class="product-card-link-wrapper" style="text-decoration: none; color: inherit; display: block;">
+                                <div class="product-image-wrapper">
+                                    <?php if (!empty($product['image_path'])): ?>
+                                        <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" loading="lazy">
+                                    <?php else: ?>
+                                        <div class="no-image-placeholder">Sem Imagem</div>
+                                    <?php endif; ?>
+                                    <span class="product-badge"><?php echo htmlspecialchars($product['category_name'] ?? 'Produto'); ?></span>
+                                </div>
+                            </a>
                             <div class="product-details">
-                                <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                <a href="/product?id=<?php echo $product['id']; ?>" style="text-decoration: none; color: inherit;">
+                                    <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                </a>
                                 <p class="product-description"><?php echo htmlspecialchars(mb_strimwidth($product['description'] ?? '', 0, 80, "...")); ?></p>
                                 <div class="product-footer">
                                     <span class="product-price">R$ <?php echo number_format($product['price'], 2, ',', '.'); ?></span>
-                                    <button class="add-to-cart-btn" aria-label="Comprar">
-                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                    </button>
+                                    <a href="/product?id=<?php echo $product['id']; ?>" class="add-to-cart-btn" aria-label="Ver Detalhes">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,6 @@
 </section>
 
 <style>
-    /* Banner Superior */
     .products-banner {
         position: relative;
         background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80');
@@ -113,7 +112,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(124, 58, 237, 0.45); /* Overlay roxo premium */
+        background-color: rgba(124, 58, 237, 0.45);
         z-index: 1;
     }
 
@@ -149,7 +148,6 @@
         color: #ddd6fe;
     }
 
-    /* Estrutura do Catálogo */
     .products-catalog-section {
         padding: 60px 8% 100px 8%;
         max-width: 1400px;
@@ -163,7 +161,6 @@
         align-items: start;
     }
 
-    /* Barra Lateral de Filtros */
     .filters-sidebar {
         background-color: #ffffff;
         border: 1px solid var(--border-color);
@@ -267,7 +264,6 @@
         border-color: #ef4444;
     }
 
-    /* Área de Exibição dos Produtos */
     .products-display-area {
         display: flex;
         flex-direction: column;
@@ -285,7 +281,6 @@
         color: var(--text-muted);
     }
 
-    /* Grade de Cards */
     .products-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -424,7 +419,6 @@
         transform: scale(1.08);
     }
 
-    /* Estado Vazio */
     .empty-products-state {
         text-align: center;
         padding: 80px 40px;

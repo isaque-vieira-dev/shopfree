@@ -1,15 +1,12 @@
 <?php
 
-// Habilitar exibição de erros
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Carregar configurações
 require_once __DIR__ . '/../config.php';
 
 echo "Iniciando o seeding do banco de dados...\n";
 
-// Tentar conectar ao banco de dados (tenta 'db' do docker e depois 'localhost' como fallback)
 $host = DB_HOST;
 $dbName = DB_NAME;
 $user = DB_USER;
@@ -36,15 +33,13 @@ try {
     }
 }
 
-// 1. Obter o id do vendedor
 $stmt = $pdo->query("SELECT id FROM user WHERE email = 'vendedor@shopfree.com' LIMIT 1");
 $sellerId = $stmt->fetchColumn();
 if (!$sellerId) {
-    $sellerId = 2; // Fallback padrão
+    $sellerId = 2;
 }
 echo "ID do Vendedor: $sellerId\n";
 
-// 2. Definir as categorias
 $categories = [
     'Eletrônicos' => 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=150&auto=format&fit=crop',
     'Roupas & Acessórios' => 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=150&auto=format&fit=crop',
@@ -54,7 +49,6 @@ $categories = [
 $categoryIds = [];
 
 foreach ($categories as $catName => $catImg) {
-    // Inserir categoria se não existir
     $stmt = $pdo->prepare("SELECT id FROM category WHERE name = :name LIMIT 1");
     $stmt->execute(['name' => $catName]);
     $catId = $stmt->fetchColumn();
@@ -65,7 +59,6 @@ foreach ($categories as $catName => $catImg) {
         $catId = $pdo->lastInsertId();
         echo "Categoria '$catName' inserida com sucesso (ID $catId).\n";
     } else {
-        // Se já existe, atualiza a imagem apenas para garantir
         $stmtUpdate = $pdo->prepare("UPDATE category SET image_path = :image_path WHERE id = :id");
         $stmtUpdate->execute(['image_path' => $catImg, 'id' => $catId]);
         echo "Categoria '$catName' já existe (ID $catId). Imagem atualizada.\n";
@@ -73,9 +66,7 @@ foreach ($categories as $catName => $catImg) {
     $categoryIds[$catName] = $catId;
 }
 
-// 3. Definir os produtos
 $products = [
-    // Eletrônicos
     [
         'category' => 'Eletrônicos',
         'name' => 'Monitor Gamer 24" UltraWide',
@@ -117,7 +108,6 @@ $products = [
         'image_path' => 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&auto=format&fit=crop'
     ],
 
-    // Roupas & Acessórios
     [
         'category' => 'Roupas & Acessórios',
         'name' => 'Jaqueta Corta Vento Premium',
@@ -159,7 +149,6 @@ $products = [
         'image_path' => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&auto=format&fit=crop'
     ],
 
-    // Casa & Decoração
     [
         'category' => 'Casa & Decoração',
         'name' => 'Luminária de Mesa Articulada',
@@ -210,7 +199,6 @@ $stmtInsertProd = $pdo->prepare("
 foreach ($products as $p) {
     $catId = $categoryIds[$p['category']];
     
-    // Verificar se o produto já existe pelo nome para evitar duplicados
     $stmtCheck = $pdo->prepare("SELECT id FROM product WHERE name = :name LIMIT 1");
     $stmtCheck->execute(['name' => $p['name']]);
     $prodExists = $stmtCheck->fetchColumn();

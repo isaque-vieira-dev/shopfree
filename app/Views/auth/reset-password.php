@@ -164,7 +164,7 @@
         text-decoration: underline;
     }
 
-    /* Alerts */
+
     .alert {
         display: flex;
         align-items: center;

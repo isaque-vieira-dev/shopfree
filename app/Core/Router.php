@@ -17,7 +17,6 @@ class Router {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         
-        // Remover pasta pública se houver
         $basePath = dirname($_SERVER['SCRIPT_NAME']);
         if ($basePath !== '/' && strpos($uri, $basePath) === 0) {
             $uri = substr($uri, strlen($basePath));
@@ -45,7 +44,6 @@ class Router {
             }
         }
 
-        // Página não encontrada (404)
         http_response_code(404);
         echo "404 - Página não encontrada";
     }

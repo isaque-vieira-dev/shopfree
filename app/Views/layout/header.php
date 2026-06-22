@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? $pageTitle . " - " . APP_NAME : APP_NAME; ?></title>
-    <!-- Google Fonts: Outfit e Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -32,7 +31,6 @@
             line-height: 1.6;
         }
 
-        /* Header / Navbar */
         .navbar {
             display: flex;
             align-items: center;
@@ -86,7 +84,6 @@
             gap: 20px;
         }
 
-        /* Barra de Busca */
         .search-container {
             display: flex;
             align-items: center;
@@ -134,7 +131,6 @@
             background-color: var(--accent-purple-hover);
         }
 
-        /* Ícones de ação */
         .icon-btn {
             background: none;
             border: none;
@@ -173,7 +169,6 @@
             border: 2px solid var(--bg-base);
         }
 
-        /* Menu Hamburger */
         .menu-toggle {
             display: none;
         }
@@ -186,7 +181,212 @@
                 display: flex;
             }
         }
+
+        .header-cart-wrapper {
+            position: relative;
+        }
+        .header-cart-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 320px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 15px;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            z-index: 1010;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .header-cart-wrapper:hover .header-cart-dropdown,
+        .header-cart-wrapper:focus-within .header-cart-dropdown {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .dropdown-header h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+        
+        .dropdown-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .dropdown-body {
+            max-height: 240px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .dropdown-empty-state {
+            padding: 20px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            text-align: left;
+        }
+        
+        .dropdown-item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        
+        .dropdown-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .dropdown-item-no-img {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        
+        .dropdown-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+        
+        .dropdown-item-title {
+            font-family: var(--font-outfit);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            text-decoration: none;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .dropdown-item-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .dropdown-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .dropdown-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-outfit);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .btn-dropdown-go-cart {
+            background-color: var(--accent-purple);
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            border-radius: 30px;
+            font-family: var(--font-outfit);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-dropdown-go-cart:hover {
+            background-color: var(--accent-purple-hover);
+        }
     </style>
+    <script>
+    window.updateHeaderCart = function(count, total, items) {
+        const badge = document.getElementById('header-cart-badge');
+        const dropdownCount = document.getElementById('dropdown-count-val');
+        const dropdownTotal = document.getElementById('dropdown-total-val');
+        const itemsList = document.getElementById('header-cart-items-list');
+        
+        if (badge) {
+            badge.innerText = count;
+            badge.style.display = count === 0 ? 'none' : '';
+        }
+        
+        if (dropdownCount) {
+            dropdownCount.innerText = count;
+        }
+        
+        if (dropdownTotal) {
+            dropdownTotal.innerText = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
+        }
+        
+        if (itemsList) {
+            if (items.length === 0) {
+                itemsList.innerHTML = '<div class="dropdown-empty-state"><p>Seu carrinho está vazio.</p></div>';
+            } else {
+                let html = '';
+                items.forEach(item => {
+                    const imgHtml = item.image_path 
+                        ? `<img src="${item.image_path}" alt="${item.name}">` 
+                        : '<div class="dropdown-item-no-img">N/A</div>';
+                    
+                    const formattedPrice = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price);
+                    
+                    html += `
+                        <div class="dropdown-item" id="dropdown-item-${item.id}">
+                            <div class="dropdown-item-img">
+                                ${imgHtml}
+                            </div>
+                            <div class="dropdown-item-info">
+                                <a href="/product?id=${item.id}" class="dropdown-item-title">${item.name}</a>
+                                <span class="dropdown-item-meta">${item.quantity}x ${formattedPrice}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                itemsList.innerHTML = html;
+            }
+        }
+    };
+    </script>
 </head>
 <body>
     <header>
@@ -211,21 +411,68 @@
             </ul>
 
             <div class="nav-actions">
-                <!-- Barra de Busca -->
                 <form action="/products" method="GET" class="search-container" style="margin: 0;">
-                    <input type="text" name="search" class="search-input" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" placeholder="Search...">
+                    <input type="text" name="search" class="search-input" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>" placeholder="Ex:vaso">
                     <button type="submit" class="search-button">
                         <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </button>
                 </form>
 
-                <!-- Carrinho (Ocultado conforme solicitação) -->
-                <button class="icon-btn" aria-label="Cart" style="display: none;">
-                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span class="icon-badge">10</span>
-                </button>
+                <?php 
+                $isClientUser = isset($_SESSION['user_id']) && (($_SESSION['role_id'] ?? null) == 2 || ($_SESSION['role_name'] ?? null) === 'Usuário');
+                if ($isClientUser): 
+                    $headerCart = $_SESSION['cart'] ?? [];
+                    $headerCartCount = count($headerCart);
+                    $headerCartTotal = 0;
+                    foreach ($headerCart as $item) {
+                        $headerCartTotal += $item['price'] * $item['quantity'];
+                    }
+                ?>
+                    <div class="header-cart-wrapper">
+                        <button class="icon-btn" id="header-cart-trigger" aria-label="Cart">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span class="icon-badge" id="header-cart-badge" style="<?php echo $headerCartCount === 0 ? 'display: none;' : ''; ?>"><?php echo $headerCartCount; ?></span>
+                        </button>
+                        
+                        <div class="header-cart-dropdown" id="header-cart-dropdown">
+                            <div class="dropdown-header">
+                                <h3>Seu Carrinho</h3>
+                                <span class="dropdown-count"><span id="dropdown-count-val"><?php echo $headerCartCount; ?></span> item(ns)</span>
+                            </div>
+                            <div class="dropdown-body" id="header-cart-items-list">
+                                <?php if (empty($headerCart)): ?>
+                                    <div class="dropdown-empty-state">
+                                        <p>Seu carrinho está vazio.</p>
+                                    </div>
+                                <?php else: ?>
+                                    <?php foreach ($headerCart as $item): ?>
+                                        <div class="dropdown-item" id="dropdown-item-<?php echo $item['id']; ?>">
+                                            <div class="dropdown-item-img">
+                                                <?php if (!empty($item['image_path'])): ?>
+                                                    <img src="<?php echo htmlspecialchars($item['image_path']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
+                                                <?php else: ?>
+                                                    <div class="dropdown-item-no-img">N/A</div>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="dropdown-item-info">
+                                                <a href="/product?id=<?php echo $item['id']; ?>" class="dropdown-item-title"><?php echo htmlspecialchars($item['name']); ?></a>
+                                                <span class="dropdown-item-meta"><?php echo $item['quantity']; ?>x R$ <?php echo number_format($item['price'], 2, ',', '.'); ?></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            <div class="dropdown-footer">
+                                <div class="dropdown-total-row">
+                                    <span>Total:</span>
+                                    <span id="dropdown-total-val">R$ <?php echo number_format($headerCartTotal, 2, ',', '.'); ?></span>
+                                </div>
+                                <a href="/cart" class="btn-dropdown-go-cart">Ir para o Carrinho</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
-                <!-- Ícone de Login / Usuário -->
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="user-menu" style="display: flex; align-items: center; gap: 12px; font-family: var(--font-outfit); font-size: 0.9rem; font-weight: 500;">
                         <a href="/dashboard" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
@@ -242,7 +489,6 @@
                     </a>
                 <?php endif; ?>
 
-                <!-- Hamburger Menu -->
                 <button class="icon-btn menu-toggle" aria-label="Menu">
                     <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 </button>

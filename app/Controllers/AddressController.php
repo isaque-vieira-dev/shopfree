@@ -13,7 +13,6 @@ class AddressController {
             session_start();
         }
 
-        // Apenas Vendedores (role 3) e Clientes/Usuários (role 2) podem gerenciar endereços
         if (!isset($_SESSION['user_id']) || ($_SESSION['role_name'] !== 'Vendedor' && $_SESSION['role_name'] !== 'Usuário' && $_SESSION['role_id'] != 2 && $_SESSION['role_id'] != 3)) {
             $_SESSION['dashboard_error'] = "Acesso negado. Apenas clientes e vendedores podem gerenciar seus endereços.";
             header('Location: /dashboard');

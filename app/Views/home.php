@@ -1,6 +1,5 @@
 <?php require_once __DIR__ . '/layout/header.php'; ?>
 
-<!-- Seção Hero -->
 <section class="hero-section">
     <div class="hero-content">
         <span class="badge-new">Bem vindo ao ShopFree</span>
@@ -14,25 +13,19 @@
     </div>
     
     <div class="hero-image-container">
-        <!-- Círculo abstrato em degradê roxo ao fundo -->
         <div class="blob-bg"></div>
         
-        <!-- Ilustração SVG premium de uma Cadeira Moderna -->
         <svg class="chair-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Sombra projetada -->
             <ellipse cx="250" cy="430" rx="140" ry="20" fill="rgba(0, 0, 0, 0.08)" />
             
-            <!-- Pernas da Cadeira -->
             <path d="M190 310 L150 430" stroke="#7c2d12" stroke-width="14" stroke-linecap="round" />
             <path d="M310 310 L350 430" stroke="#7c2d12" stroke-width="14" stroke-linecap="round" />
             <path d="M210 310 L230 420" stroke="#9a3412" stroke-width="10" stroke-linecap="round" />
             <path d="M290 310 L270 420" stroke="#9a3412" stroke-width="10" stroke-linecap="round" />
             
-            <!-- Assento/Encosto da Cadeira Estofada (Teal/Turquesa como na foto, contrastando perfeitamente com o roxo) -->
             <path d="M140 280 C140 230, 160 160, 200 120 C230 90, 270 90, 300 120 C340 160, 360 230, 360 280 C360 320, 340 340, 250 340 C160 340, 140 320, 140 280 Z" fill="#2dd4bf" />
             <path d="M140 280 C140 310, 170 330, 250 330 C330 330, 360 310, 360 280 C360 250, 330 240, 250 240 C170 240, 140 250, 140 280 Z" fill="#0d9488" />
             
-            <!-- Detalhes das costuras capitonê -->
             <circle cx="210" cy="180" r="6" fill="#115e59" />
             <circle cx="250" cy="180" r="6" fill="#115e59" />
             <circle cx="290" cy="180" r="6" fill="#115e59" />
@@ -48,11 +41,9 @@
     </div>
 </section>
 
-<!-- Seção de Proposta de Valor -->
 <section class="features-section">
     <div class="feature-item">
         <div class="feature-icon">
-            <!-- Caminhão de Entrega -->
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
         </div>
         <div class="feature-info">
@@ -63,7 +54,6 @@
     
     <div class="feature-item">
         <div class="feature-icon">
-            <!-- Reembolso/Dinheiro -->
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
         </div>
         <div class="feature-info">
@@ -74,7 +64,6 @@
 
     <div class="feature-item">
         <div class="feature-icon">
-            <!-- Suporte 24/7 -->
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
         </div>
         <div class="feature-info">
@@ -85,7 +74,6 @@
 
     <div class="feature-item">
         <div class="feature-icon">
-            <!-- Confiável/Selo -->
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
         <div class="feature-info">
@@ -95,7 +83,6 @@
     </div>
 </section>
 
-<!-- Seção de Carrossel de Categorias -->
 <?php if (!empty($allCategories)): ?>
     <section class="categories-showcase-section">
         <div class="carousel-header">
@@ -129,7 +116,6 @@
     </section>
 <?php endif; ?>
 
-<!-- Seções de Carrosséis de Produtos por Categoria -->
 <?php if (!empty($carousels)): ?>
     <section class="storefront-section" id="shop">
         <?php foreach ($carousels as $index => $carousel): ?>
@@ -150,22 +136,29 @@
                     <div class="carousel-track" id="carousel-track-<?php echo $index; ?>">
                         <?php foreach ($carousel['products'] as $product): ?>
                             <div class="product-card">
-                                <div class="product-image-wrapper">
-                                    <?php if (!empty($product['image_path'])): ?>
-                                        <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" loading="lazy">
-                                    <?php else: ?>
-                                        <div class="no-image-placeholder">Sem Imagem</div>
-                                    <?php endif; ?>
-                                    <span class="product-badge"><?php echo htmlspecialchars($carousel['category']['name']); ?></span>
-                                </div>
+                                <a href="/product?id=<?php echo $product['id']; ?>" class="product-card-link-wrapper" style="text-decoration: none; color: inherit; display: block;">
+                                    <div class="product-image-wrapper">
+                                        <?php if (!empty($product['image_path'])): ?>
+                                            <img src="<?php echo htmlspecialchars($product['image_path']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" loading="lazy">
+                                        <?php else: ?>
+                                            <div class="no-image-placeholder">Sem Imagem</div>
+                                        <?php endif; ?>
+                                        <span class="product-badge"><?php echo htmlspecialchars($carousel['category']['name']); ?></span>
+                                    </div>
+                                </a>
                                 <div class="product-details">
-                                    <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                    <a href="/product?id=<?php echo $product['id']; ?>" style="text-decoration: none; color: inherit;">
+                                        <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                    </a>
                                     <p class="product-description"><?php echo htmlspecialchars(mb_strimwidth($product['description'], 0, 80, "...")); ?></p>
                                     <div class="product-footer">
                                         <span class="product-price">R$ <?php echo number_format($product['price'], 2, ',', '.'); ?></span>
-                                        <button class="add-to-cart-btn" aria-label="Comprar">
-                                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                        </button>
+                                        <a href="/product?id=<?php echo $product['id']; ?>" class="add-to-cart-btn" aria-label="Ver Detalhes">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +174,7 @@
 function slideCarousel(index, direction) {
     const track = document.getElementById('carousel-track-' + index);
     if (track) {
-        const scrollAmount = 304 * 2; // Scroll 2 cards
+        const scrollAmount = 304 * 2;
         track.parentElement.scrollBy({
             left: direction * scrollAmount,
             behavior: 'smooth'
@@ -192,7 +185,7 @@ function slideCarousel(index, direction) {
 function slideCategoriesCarousel(direction) {
     const track = document.getElementById('categories-carousel-track');
     if (track) {
-        const scrollAmount = 240 * 2; // Scroll 2 items
+        const scrollAmount = 240 * 2;
         track.parentElement.scrollBy({
             left: direction * scrollAmount,
             behavior: 'smooth'
@@ -202,7 +195,6 @@ function slideCategoriesCarousel(direction) {
 </script>
 
 <style>
-    /* Estilos da Seção Hero */
     .hero-section {
         display: grid;
         grid-template-columns: 1.1fr 0.9fr;
@@ -291,7 +283,6 @@ function slideCategoriesCarousel(direction) {
         transform: translateY(-2px);
     }
 
-    /* Imagem do Hero / Blob */
     .hero-image-container {
         position: relative;
         display: flex;
@@ -325,7 +316,6 @@ function slideCategoriesCarousel(direction) {
         50% { transform: translateY(-10px); }
     }
 
-    /* Seção de Características / Propostas de Valor */
     .features-section {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -370,7 +360,6 @@ function slideCategoriesCarousel(direction) {
         color: var(--text-muted);
     }
 
-    /* Responsividade */
     @media (max-width: 992px) {
         .hero-section {
             grid-template-columns: 1fr;
@@ -400,7 +389,6 @@ function slideCategoriesCarousel(direction) {
         }
     }
 
-    /* Estilos dos Carrosséis de Produtos */
     .storefront-section {
         padding: 40px 8% 80px 8%;
         max-width: 1400px;
@@ -472,13 +460,13 @@ function slideCategoriesCarousel(direction) {
 
     .carousel-track-container {
         overflow-x: auto;
-        scrollbar-width: none; /* Firefox */
+        scrollbar-width: none;
         scroll-behavior: smooth;
         padding: 10px 0;
     }
 
     .carousel-track-container::-webkit-scrollbar {
-        display: none; /* Safari/Chrome */
+        display: none;
     }
 
     .carousel-track {
@@ -619,7 +607,6 @@ function slideCategoriesCarousel(direction) {
         transform: scale(1.08);
     }
 
-    /* Estilos do Carrossel de Categorias */
     .categories-showcase-section {
         padding: 60px 8% 0 8%;
         max-width: 1400px;

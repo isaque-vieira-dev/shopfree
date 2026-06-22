@@ -15,7 +15,6 @@ class ProductController {
             session_start();
         }
 
-        // Verificar se é Vendedor (seller)
         if (!isset($_SESSION['user_id']) || ($_SESSION['role_name'] !== 'Vendedor' && $_SESSION['role_id'] != 3)) {
             $_SESSION['dashboard_error'] = "Acesso negado. Apenas vendedores podem gerenciar produtos.";
             header('Location: /dashboard');
@@ -92,7 +91,6 @@ class ProductController {
         $id = (int)($_GET['id'] ?? 0);
         $product = $this->productModel->find($id);
 
-        // Validar propriedade do produto
         if (!$product || $product['user_id'] != $_SESSION['user_id']) {
             $_SESSION['product_error'] = "Produto não encontrado.";
             header('Location: /seller/products');
@@ -117,7 +115,6 @@ class ProductController {
 
         $product = $this->productModel->find($id);
 
-        // Validar propriedade do produto
         if (!$product || $product['user_id'] != $_SESSION['user_id']) {
             $_SESSION['product_error'] = "Produto não encontrado ou acesso não autorizado.";
             header('Location: /seller/products');
@@ -178,10 +175,6 @@ class ProductController {
         exit;
     }
 
-    /**
-     * Valida e salva o upload de imagem de um produto.
-     * Retorna o caminho público do arquivo ou null se não houver upload.
-     */
     private function handleImageUpload(): ?string {
         if (!isset($_FILES['image_file']) || $_FILES['image_file']['error'] === UPLOAD_ERR_NO_FILE) {
             return null;
@@ -193,12 +186,10 @@ class ProductController {
             throw new Exception("Erro no upload do arquivo (Código " . $file['error'] . ").");
         }
 
-        // Validar tamanho (5MB)
         if ($file['size'] > 5 * 1024 * 1024) {
             throw new Exception("O tamanho máximo permitido para imagem é de 5MB.");
         }
 
-        // Validar tipo do arquivo
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!file_exists($file['tmp_name'])) {
             throw new Exception("Arquivo temporário não encontrado.");
@@ -208,7 +199,6 @@ class ProductController {
             throw new Exception("Tipo de arquivo inválido. Apenas JPG, PNG, GIF e WEBP são permitidos.");
         }
 
-        // Obter extensão
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         if (empty($extension)) {
             $extension = str_replace('image/', '', $fileMimeType);
@@ -217,7 +207,6 @@ class ProductController {
             }
         }
 
-        // Garantir que a pasta de uploads existe
         $uploadDir = __DIR__ . '/../../uploads/';
         if (!is_dir($uploadDir)) {
             if (!mkdir($uploadDir, 0755, true)) {
@@ -225,7 +214,6 @@ class ProductController {
             }
         }
 
-        // Gerar nome único e seguro
         $newFilename = uniqid('prod_', true) . '.' . $extension;
         $destPath = $uploadDir . $newFilename;
 

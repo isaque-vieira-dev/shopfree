@@ -1,6 +1,5 @@
 <?php require_once __DIR__ . '/layout/header.php'; ?>
 
-<!-- Banner Superior -->
 <section class="about-banner">
     <div class="banner-overlay"></div>
     <div class="banner-content">
@@ -9,7 +8,6 @@
     </div>
 </section>
 
-<!-- Seção História e Visão -->
 <section class="about-intro-section">
     <div class="about-intro-container">
         <div class="about-image-wrapper">
@@ -21,7 +19,7 @@
             <span class="badge-about">QUEM SOMOS</span>
             <h2>Inovando a forma como você compra online</h2>
             <p>
-                O <strong>ShopFree</strong> nasceu com um propósito claro: eliminar as barreiras e complicações do e-commerce tradicional, oferecendo uma experiência de compra fluida, transparente e extremamente prazerosa. 
+                O <strong>ShopFree</strong> nasceu com um propósito claro: eliminar as barreiras e complicações do e-commerce tradicional, offering uma experiência de compra fluida, transparente e extremamente prazerosa. 
             </p>
             <p>
                 Nosso foco é trazer curadoria de alta qualidade em produtos de decoração, moda e estilo de vida. Acreditamos que a estética do seu lar e do seu dia a dia influenciam diretamente o seu bem-estar, e estamos aqui para aproximar você do design de alto padrão com preços justos.
@@ -40,7 +38,6 @@
     </div>
 </section>
 
-<!-- Seção Estatísticas (Números) -->
 <section class="stats-section">
     <div class="stats-grid">
         <div class="stat-card">
@@ -62,7 +59,6 @@
     </div>
 </section>
 
-<!-- Seção Nossos Valores -->
 <section class="values-section">
     <div class="section-title-wrapper">
         <span class="badge-about">NOSSOS VALORES</span>
@@ -72,7 +68,6 @@
     <div class="values-grid">
         <div class="value-card">
             <div class="value-icon">
-                <!-- Escudo de Qualidade -->
                 <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             </div>
             <h3>Qualidade Curada</h3>
@@ -81,7 +76,6 @@
 
         <div class="value-card">
             <div class="value-icon">
-                <!-- Coração / Empatia -->
                 <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </div>
             <h3>Cliente Primeiro</h3>
@@ -90,7 +84,6 @@
 
         <div class="value-card">
             <div class="value-icon">
-                <!-- Foguete / Inovação -->
                 <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
             </div>
             <h3>Evolução Ágil</h3>
@@ -100,7 +93,6 @@
 </section>
 
 <style>
-    /* Banner Superior */
     .about-banner {
         position: relative;
         background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80');
@@ -120,7 +112,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(76, 29, 149, 0.6); /* Overlay roxo */
+        background-color: rgba(76, 29, 149, 0.6);
         z-index: 1;
     }
 
@@ -155,7 +147,6 @@
         color: #ddd6fe;
     }
 
-    /* Introdução */
     .about-intro-section {
         padding: 80px 8%;
         max-width: 1400px;
@@ -247,7 +238,6 @@
         margin-bottom: 0;
     }
 
-    /* Seção Estatísticas (Purple Gradient) */
     .stats-section {
         background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
         color: #ffffff;
@@ -279,7 +269,6 @@
         font-weight: 500;
     }
 
-    /* Valores */
     .values-section {
         padding: 100px 8% 120px 8%;
         max-width: 1400px;

@@ -12,18 +12,12 @@ class Address {
         $this->db = Database::getConnection();
     }
 
-    /**
-     * Retorna todos os endereços de um usuário.
-     */
     public function allByUser(int $userId): array {
         $stmt = $this->db->prepare("SELECT * FROM address WHERE user_id = :user_id ORDER BY is_default DESC, id DESC");
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Busca um endereço por ID e ID de usuário.
-     */
     public function find(int $id, int $userId): ?array {
         $stmt = $this->db->prepare("SELECT * FROM address WHERE id = :id AND user_id = :user_id LIMIT 1");
         $stmt->execute(['id' => $id, 'user_id' => $userId]);
@@ -31,13 +25,9 @@ class Address {
         return $result ?: null;
     }
 
-    /**
-     * Cria um novo endereço.
-     */
     public function create(array $data): bool {
         $this->db->beginTransaction();
         try {
-            // Se este endereço for marcado como padrão, desmarcar os outros
             if (!empty($data['is_default'])) {
                 $stmt = $this->db->prepare("UPDATE address SET is_default = FALSE WHERE user_id = :user_id");
                 $stmt->execute(['user_id' => $data['user_id']]);
@@ -69,13 +59,9 @@ class Address {
         }
     }
 
-    /**
-     * Atualiza um endereço existente.
-     */
     public function update(int $id, array $data): bool {
         $this->db->beginTransaction();
         try {
-            // Se este endereço for marcado como padrão, desmarcar os outros
             if (!empty($data['is_default'])) {
                 $stmt = $this->db->prepare("UPDATE address SET is_default = FALSE WHERE user_id = :user_id");
                 $stmt->execute(['user_id' => $data['user_id']]);
@@ -117,9 +103,6 @@ class Address {
         }
     }
 
-    /**
-     * Exclui um endereço.
-     */
     public function delete(int $id, int $userId): bool {
         $stmt = $this->db->prepare("DELETE FROM address WHERE id = :id AND user_id = :user_id");
         try {

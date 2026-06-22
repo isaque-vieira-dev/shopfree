@@ -1,6 +1,5 @@
 <?php require_once __DIR__ . '/layout/header.php'; ?>
 
-<!-- Banner Superior -->
 <section class="categories-banner">
     <div class="banner-overlay"></div>
     <div class="banner-content">
@@ -9,7 +8,6 @@
     </div>
 </section>
 
-<!-- Catálogo de Categorias -->
 <section class="categories-catalog-section">
     <div class="section-header">
         <span class="badge-accent">Curadoria Especial</span>
@@ -46,7 +44,6 @@
 </section>
 
 <style>
-    /* Banner Superior */
     .categories-banner {
         position: relative;
         background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80');
@@ -66,7 +63,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(124, 58, 237, 0.45); /* Overlay Roxo Premium */
+        background-color: rgba(124, 58, 237, 0.45);
         backdrop-filter: blur(1px);
         z-index: 1;
     }
@@ -103,7 +100,6 @@
         color: #ddd6fe;
     }
 
-    /* Seção de Catálogo */
     .categories-catalog-section {
         padding: 80px 8% 120px 8%;
         max-width: 1400px;
@@ -146,7 +142,6 @@
         line-height: 1.6;
     }
 
-    /* Grid de Categorias */
     .categories-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));

@@ -1,7 +1,6 @@
 <?php require_once __DIR__ . '/../layout/header.php'; ?>
 
 <div class="dashboard-container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px; font-family: var(--font-inter); display: grid; grid-template-columns: 280px 1fr; gap: 40px; min-height: 70vh;">
-    <!-- Sidebar -->
     <aside style="background: #ffffff; border-radius: 20px; padding: 30px 24px; border: 1px solid var(--border-color); align-self: start; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);">
         <div style="margin-bottom: 30px; text-align: center;">
             <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--accent-purple-light); color: var(--accent-purple); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.8rem; font-weight: 800; font-family: var(--font-outfit);">
@@ -51,9 +50,7 @@
         </nav>
     </aside>
 
-    <!-- Main Content Area -->
     <main style="flex: 1;">
-        <!-- Mensagens de Erro ou Alerta do Dashboard -->
         <?php if (isset($_SESSION['dashboard_error'])): ?>
             <div style="background: #fef2f2; border: 1px solid #fee2e2; color: #ef4444; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; font-size: 0.9rem; font-weight: 500;">
                 <?php echo htmlspecialchars($_SESSION['dashboard_error']); unset($_SESSION['dashboard_error']); ?>
@@ -64,7 +61,6 @@
             <h1 style="font-family: var(--font-outfit); font-weight: 800; font-size: 2.2rem; color: var(--text-color); margin-bottom: 12px;">Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
             <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 35px; line-height: 1.6;">Bem-vindo ao seu painel. Selecione uma opção no menu lateral para gerenciar suas informações e atividades.</p>
             
-            <!-- Cards de Ações Rápidas baseadas na role -->
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;">
                 <?php if ($_SESSION['role_name'] === 'Administrador' || $_SESSION['role_id'] == 1): ?>
                     <a href="/admin/categories" style="background: var(--bg-base); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; text-decoration: none; color: inherit; transition: all 0.25s ease;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
@@ -90,6 +86,23 @@
                         </div>
                         <h4 style="font-family: var(--font-outfit); font-weight: 700; font-size: 1.1rem; margin-bottom: 6px;">Meus Produtos</h4>
                         <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Cadastre e gerencie os anúncios de produtos que você está vendendo.</p>
+                    </a>
+                    <a href="/seller/orders" style="background: var(--bg-base); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; text-decoration: none; color: inherit; transition: all 0.25s ease;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-purple-light); color: var(--accent-purple); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                        </div>
+                        <h4 style="font-family: var(--font-outfit); font-weight: 700; font-size: 1.1rem; margin-bottom: 6px;">Pedidos Recebidos</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Gerencie e altere o status dos pedidos recebidos para os seus produtos.</p>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($_SESSION['role_name'] === 'Usuário' || $_SESSION['role_id'] == 2): ?>
+                    <a href="/dashboard/orders" style="background: var(--bg-base); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; text-decoration: none; color: inherit; transition: all 0.25s ease;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-purple-light); color: var(--accent-purple); display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        </div>
+                        <h4 style="font-family: var(--font-outfit); font-weight: 700; font-size: 1.1rem; margin-bottom: 6px;">Meus Pedidos</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Acompanhe o status e histórico de todas as suas compras.</p>
                     </a>
                 <?php endif; ?>
 

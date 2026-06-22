@@ -12,9 +12,6 @@ class Product {
         $this->db = Database::getConnection();
     }
 
-    /**
-     * Retorna todos os produtos de um vendedor específico.
-     */
     public function allBySeller(int $sellerId): array {
         $stmt = $this->db->prepare("
             SELECT p.*, c.name as category_name 
@@ -27,9 +24,6 @@ class Product {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Busca um produto por ID.
-     */
     public function find(int $id): ?array {
         $stmt = $this->db->prepare("SELECT * FROM product WHERE id = :id LIMIT 1");
         $stmt->execute(['id' => $id]);
@@ -37,9 +31,6 @@ class Product {
         return $result ?: null;
     }
 
-    /**
-     * Cria um novo produto.
-     */
     public function create(array $data): bool {
         $stmt = $this->db->prepare("
             INSERT INTO product (user_id, category_id, name, description, price, stock, image_path) 
@@ -60,9 +51,6 @@ class Product {
         }
     }
 
-    /**
-     * Atualiza um produto.
-     */
     public function update(int $id, array $data): bool {
         $stmt = $this->db->prepare("
             UPDATE product 
@@ -90,9 +78,6 @@ class Product {
         }
     }
 
-    /**
-     * Exclui um produto.
-     */
     public function delete(int $id, int $sellerId): bool {
         $stmt = $this->db->prepare("DELETE FROM product WHERE id = :id AND user_id = :seller_id");
         try {
@@ -102,9 +87,6 @@ class Product {
         }
     }
 
-    /**
-     * Retorna produtos de uma categoria específica.
-     */
     public function getByCategory(int $categoryId, int $limit = 10): array {
         $stmt = $this->db->prepare("
             SELECT p.*, c.name as category_name 
@@ -120,9 +102,6 @@ class Product {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Filtra e pesquisa produtos por categoria e/ou nome.
-     */
     public function search(?int $categoryId = null, ?string $search = null): array {
         $sql = "
             SELECT p.*, c.name as category_name 

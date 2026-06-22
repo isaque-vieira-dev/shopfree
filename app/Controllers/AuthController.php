@@ -12,9 +12,6 @@ class AuthController {
         $this->userModel = new User();
     }
 
-    /**
-     * Exibe a tela de Login
-     */
     public function showLoginForm(): void {
         if (isset($_SESSION['user_id'])) {
             header('Location: /');
@@ -25,16 +22,12 @@ class AuthController {
         $error = $_SESSION['login_error'] ?? null;
         $success = $_SESSION['register_success'] ?? null;
 
-        // Limpa mensagens após exibição
         unset($_SESSION['login_error']);
         unset($_SESSION['register_success']);
 
         require_once __DIR__ . '/../Views/auth/login.php';
     }
 
-    /**
-     * Processa a autenticação
-     */
     public function login(): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /login');
@@ -53,7 +46,6 @@ class AuthController {
         $user = $this->userModel->findByEmail($email);
 
         if ($user && password_verify($password, $user['password'])) {
-            // Login com sucesso, definir variáveis de sessão
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
@@ -69,9 +61,6 @@ class AuthController {
         }
     }
 
-    /**
-     * Finaliza a sessão do usuário
-     */
     public function logout(): void {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -84,9 +73,6 @@ class AuthController {
         exit;
     }
 
-    /**
-     * Exibe a tela de Registro
-     */
     public function showRegisterForm(): void {
         if (isset($_SESSION['user_id'])) {
             header('Location: /');
@@ -100,9 +86,6 @@ class AuthController {
         require_once __DIR__ . '/../Views/auth/register.php';
     }
 
-    /**
-     * Processa a criação de conta
-     */
     public function register(): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /register');
@@ -131,7 +114,6 @@ class AuthController {
             exit;
         }
 
-        // Verificar se e-mail já existe
         if ($this->userModel->findByEmail($email)) {
             $_SESSION['register_error'] = "Este e-mail já está sendo utilizado.";
             header('Location: /register');
@@ -145,12 +127,10 @@ class AuthController {
                 'password' => $password
             ]);
 
-            // Se criado com sucesso, logar automaticamente
             $_SESSION['user_id'] = $userId;
             $_SESSION['user_name'] = $name;
             $_SESSION['user_email'] = $email;
             
-            // Buscar informações completas do usuário recém criado para pegar o role_id correto
             $newUser = $this->userModel->findByEmail($email);
             if ($newUser) {
                 $_SESSION['role_id'] = $newUser['role_id'];
@@ -167,9 +147,6 @@ class AuthController {
         }
     }
 
-    /**
-     * Exibe a tela de Registro de Vendedor (Seller)
-     */
     public function showSellerRegisterForm(): void {
         if (isset($_SESSION['user_id'])) {
             header('Location: /');
@@ -183,9 +160,6 @@ class AuthController {
         require_once __DIR__ . '/../Views/auth/register-seller.php';
     }
 
-    /**
-     * Processa o registro de Vendedor (Seller)
-     */
     public function registerSeller(): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /seller');
@@ -229,7 +203,6 @@ class AuthController {
                 'role_id' => $sellerRoleId
             ]);
 
-            // Login automático
             $_SESSION['user_id'] = $userId;
             $_SESSION['user_name'] = $name;
             $_SESSION['user_email'] = $email;
@@ -246,9 +219,6 @@ class AuthController {
         }
     }
 
-    /**
-     * Exibe o formulário de "Esqueci minha senha"
-     */
     public function showForgotPasswordForm(): void {
         if (isset($_SESSION['user_id'])) {
             header('Location: /');
@@ -267,9 +237,6 @@ class AuthController {
         require_once __DIR__ . '/../Views/auth/forgot-password.php';
     }
 
-    /**
-     * Processa a solicitação de recuperação de senha
-     */
     public function forgotPassword(): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /forgot-password');
@@ -292,13 +259,11 @@ class AuthController {
             exit;
         }
 
-        // Gerar token e expiração (1 hora)
         $token = bin2hex(random_bytes(32));
         $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         $this->userModel->savePasswordResetToken($email, $token, $expiresAt);
 
-        // Exibir link na tela para simulação
         $_SESSION['forgot_success'] = "E-mail de recuperação enviado com sucesso! (Simulado)";
         $_SESSION['reset_link'] = "/reset-password?token=" . $token;
 
@@ -306,9 +271,6 @@ class AuthController {
         exit;
     }
 
-    /**
-     * Exibe a tela de redefinição de senha
-     */
     public function showResetPasswordForm(): void {
         if (isset($_SESSION['user_id'])) {
             header('Location: /');
@@ -338,9 +300,6 @@ class AuthController {
         require_once __DIR__ . '/../Views/auth/reset-password.php';
     }
 
-    /**
-     * Processa a redefinição de senha
-     */
     public function resetPassword(): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /forgot-password');
@@ -378,7 +337,6 @@ class AuthController {
             exit;
         }
 
-        // Atualizar senha e remover token
         $this->userModel->updatePassword($user['id'], $password);
         $this->userModel->deletePasswordResetToken($resetData['email']);
 
@@ -387,9 +345,6 @@ class AuthController {
         exit;
     }
 
-    /**
-     * Traduz o nome da role para exibição na sessão.
-     */
     private function getRoleLabel(?string $roleName): string {
         $map = [
             'seller' => 'Vendedor',
