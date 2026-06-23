@@ -97,7 +97,126 @@
     </div>
 </section>
 
+<!-- Seção de Sucesso (Simulação) -->
+<section id="contact-success" class="contact-success-section" style="display: none;">
+    <div class="success-card">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+        <h2>Contato Enviado!</h2>
+        <p>Sua mensagem foi enviada com sucesso. Retornaremos o seu contato em breve!</p>
+        <div class="countdown-text">Você será redirecionado para a tela inicial em <span id="countdown">5</span> segundos...</div>
+        <a href="/" class="home-btn">Voltar para a Página Inicial</a>
+    </div>
+</section>
+
 <style>
+    /* Estilos da Seção de Sucesso */
+    .contact-success-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        padding: 80px 8%;
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    }
+
+    .success-card {
+        background-color: #ffffff;
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: 24px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(76, 29, 149, 0.05);
+        max-width: 500px;
+        width: 100%;
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .success-icon {
+        color: #10b981;
+        background-color: #ecfdf5;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px auto;
+        animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    .success-card h2 {
+        font-family: var(--font-outfit, sans-serif);
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: #1e1b4b;
+    }
+
+    .success-card p {
+        font-family: var(--font-inter, sans-serif);
+        font-size: 1rem;
+        color: var(--text-muted, #64748b);
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .countdown-text {
+        font-family: var(--font-inter, sans-serif);
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 30px;
+    }
+
+    .countdown-text span {
+        font-weight: 600;
+        color: #7c3aed;
+    }
+
+    .home-btn {
+        display: inline-block;
+        background-color: #7c3aed;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        padding: 14px 28px;
+        font-family: var(--font-outfit, sans-serif);
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+    }
+
+    .home-btn:hover {
+        background-color: #6d28d9;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+    }
+
     .contact-banner {
         position: relative;
         background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80');
@@ -339,5 +458,39 @@
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.form-container form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Ocultar seções da página de contato
+            document.querySelector('.contact-banner').style.display = 'none';
+            document.querySelector('.contact-cards-section').style.display = 'none';
+            document.querySelector('.contact-form-section').style.display = 'none';
+            
+            // Mostrar tela de sucesso
+            const successSection = document.getElementById('contact-success');
+            successSection.style.display = 'flex';
+            
+            // Iniciar contagem regressiva para redirecionamento
+            let secondsLeft = 5;
+            const countdownEl = document.getElementById('countdown');
+            
+            const timer = setInterval(function() {
+                secondsLeft--;
+                countdownEl.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = '/';
+                }
+            }, 1000);
+        });
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/layout/footer.php'; ?>

@@ -475,9 +475,22 @@
 
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <div class="user-menu" style="display: flex; align-items: center; gap: 12px; font-family: var(--font-outfit); font-size: 0.9rem; font-weight: 500;">
-                        <a href="/dashboard" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-                            <span class="user-name" style="color: var(--text-muted); font-weight: 600; margin-bottom: 2px;">Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?></span>
-                            <span class="user-role" style="font-size: 0.75rem; color: var(--accent-purple); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo htmlspecialchars($_SESSION['role_name'] ?? 'Usuário'); ?></span>
+                        <a href="/dashboard" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px; line-height: 1.2; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" title="Ir para o Dashboard">
+                            <div style="background-color: var(--accent-purple-light); padding: 6px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent-purple);">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="9"></rect>
+                                    <rect x="14" y="3" width="7" height="5"></rect>
+                                    <rect x="14" y="12" width="7" height="9"></rect>
+                                    <rect x="3" y="16" width="7" height="5"></rect>
+                                </svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                                <span class="user-name" style="color: var(--text-muted); font-weight: 600; margin-bottom: 2px;">Olá, <?php echo htmlspecialchars(explode(' ', $_SESSION['user_name'])[0]); ?></span>
+                                <span class="user-role" style="font-size: 0.75rem; color: var(--accent-purple); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+                                    <?php echo htmlspecialchars($_SESSION['role_name'] ?? 'Usuário'); ?>
+                                    <span style="font-size: 0.65rem; background: var(--accent-purple); color: #fff; padding: 1px 5px; border-radius: 4px; font-weight: 700; letter-spacing: 0;">PAINEL</span>
+                                </span>
+                            </div>
                         </a>
                         <a href="/logout" class="icon-btn" aria-label="Logout" title="Sair" style="color: #ef4444;">
                             <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
