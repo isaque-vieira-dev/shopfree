@@ -1,6 +1,7 @@
 <?php
 
 define('DB_HOST', getenv('DB_HOST') ?: 'maroon-quetzal-373664.hostingersite.com');
+define('DB_PORT', getenv('DB_PORT') ?: '3306');
 define('DB_NAME', getenv('DB_NAME') ?: 'u321757503_shopfree');
 define('DB_USER', getenv('DB_USER') ?: 'u321757503_shopfree');
 define('DB_PASS', getenv('DB_PASS') ?: 'L*n1@bz8');
