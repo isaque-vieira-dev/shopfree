@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Category;
 use App\Models\User;
+use App\Core\StorageService;
 use Exception;
 
 class AdminController {
@@ -302,47 +303,6 @@ class AdminController {
             return null;
         }
 
-        $file = $_FILES['image_file'];
-
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            throw new Exception("Erro no upload do arquivo (Código " . $file['error'] . ").");
-        }
-
-        if ($file['size'] > 5 * 1024 * 1024) {
-            throw new Exception("O tamanho máximo permitido para imagem é de 5MB.");
-        }
-
-        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!file_exists($file['tmp_name'])) {
-            throw new Exception("Arquivo temporário não encontrado.");
-        }
-        $fileMimeType = mime_content_type($file['tmp_name']);
-        if (!in_array($fileMimeType, $allowedMimeTypes)) {
-            throw new Exception("Tipo de arquivo inválido. Apenas JPG, PNG, GIF e WEBP são permitidos.");
-        }
-
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        if (empty($extension)) {
-            $extension = str_replace('image/', '', $fileMimeType);
-            if ($extension === 'jpeg') {
-                $extension = 'jpg';
-            }
-        }
-
-        $uploadDir = __DIR__ . '/../../uploads/';
-        if (!is_dir($uploadDir)) {
-            if (!mkdir($uploadDir, 0755, true)) {
-                throw new Exception("Erro ao criar a pasta de uploads.");
-            }
-        }
-
-        $newFilename = uniqid('cat_', true) . '.' . $extension;
-        $destPath = $uploadDir . $newFilename;
-
-        if (!move_uploaded_file($file['tmp_name'], $destPath)) {
-            throw new Exception("Erro ao salvar o arquivo no servidor.");
-        }
-
-        return '/uploads/' . $newFilename;
+        return StorageService::upload($_FILES['image_file'], 'cat_');
     }
 }
