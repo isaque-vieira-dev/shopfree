@@ -57,8 +57,8 @@
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
         </div>
         <div class="feature-info">
-            <h3>Money Return</h3>
-            <p>Back guarantee under 7 day</p>
+            <h3>Reembolso Garantido</h3>
+            <p>Garantia de devolução em até 7 dias</p>
         </div>
     </div>
 
